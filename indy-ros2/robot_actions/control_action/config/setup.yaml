@@ -1,0 +1,5 @@
+setup:
+  HomePose: [0.0, 0.0, -1.57, 0.0, -1.57, 0.0]
+  DorpPose: [0.0, 1.117, -2.199, 0.0, -0.471, 0.0]
+  OffSetDistance: 0.06
+  OffSetAngle: 0.5

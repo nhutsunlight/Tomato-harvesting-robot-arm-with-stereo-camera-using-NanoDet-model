@@ -1,0 +1,16 @@
+6dof:
+  joint0: 0.0        #0.0
+  joint1: 1.117     #0.0
+  joint2: -2.199   #-1.57
+  joint3: 0.0    #0.0
+  joint4: -0.471   #-1.57
+  joint5: 0.0   #0.0
+  gripper_controller: -0.7
+7dof:
+  joint0: 0.0
+  joint1: 0.0
+  joint2: 0.0
+  joint3: -1.57
+  joint4: 0.0
+  joint5: -1.57
+  joint6: 0.0
