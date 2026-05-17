@@ -165,24 +165,24 @@ struct TestExecuteWorkflow
                         1,
                         2);
 
-                    self.setOctomapCollision(true);
+                    //self.setOctomapCollision(true);
                     self.sendGripperCommand(0.8, 2);
                     feedback->progress = 0.10;
                     goal_handle->publish_feedback(feedback);
 
                     self.sendGripperCommand(0.0, step_id++);
-                    self.setOctomapCollision(false);
+                    //self.setOctomapCollision(false);
 
                     previous_target = current_target;
                     cluster_started = true;
                     continue;
                 }
 
-                self.setOctomapCollision(true);
+                //self.setOctomapCollision(true);
                 self.callMoveRobot(previous_target.pose, current_target.pose, step_id++, 1);
                 self.sendGripperCommand(0.8, step_id++);
                 self.sendGripperCommand(0.0, step_id++);
-                self.setOctomapCollision(false);
+                //self.setOctomapCollision(false);
 
                 const float ratio =
                     static_cast<float>(mi + 1) / static_cast<float>(cluster.size());
