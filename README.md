@@ -46,7 +46,7 @@ ros2 launch indy_moveit indy_moveit_gazebo.launch.py indy_type:=indy7
 ```
 
 ## Tech Stack
-- **Language**: Python (47%), C++ (44%), CMake (8.2%), Shell (0.3%)
+- **Language**: Python, C++, CMake, Shell
 - **Framework**: ROS2 Humble
 - **Simulation**: Gazebo
 - **Detection**: NanoDet
