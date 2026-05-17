@@ -1,0 +1,41 @@
+# setup.yaml
+float64[] home_pose
+float64[] drop_pose
+float64 offset_distance
+float64 y_offset_distance
+float64 offset_angle
+float64 fx_offset
+float64 object_offset
+bool multi_collect_mode
+
+# stereo_config.yaml
+string stereo_method
+
+# SGBM
+int32 sgbm_min_disparity
+int32 sgbm_num_disparities
+int32 sgbm_block_size
+int32 sgbm_p1
+int32 sgbm_p2
+int32 sgbm_disp12maxdiff
+int32 sgbm_uniquenessratio
+int32 sgbm_specklewindowsize
+int32 sgbm_specklerange
+int32 sgbm_prefiltercap
+int32 sgbm_mode
+int32 sgbm_wls_lambda
+float64 sgbm_wls_sigma
+
+# BM
+int32 bm_num_disparities
+int32 bm_block_size
+int32 bm_prefiltertype
+int32 bm_prefiltersize
+int32 bm_prefiltercap
+int32 bm_texturethreshold
+int32 bm_uniquenessratio
+int32 bm_specklewindowsize
+int32 bm_specklerange
+int32 bm_disp12maxdiff
+int32 bm_wls_lambda
+float64 bm_wls_sigma

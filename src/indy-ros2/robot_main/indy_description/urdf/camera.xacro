@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="stereo_camera_robot">
+
+    <!-- Khối gắn camera -->
+    <link name="stereo_camera_base">
+        <geometry>
+            <box size="0.06 0.06 0.02"/>  <!-- Giả lập kích thước nhỏ hơn -->
+        </geometry>
+        <material name="grey">
+            <color rgba="0.5 0.5 0.5 1.0"/>
+        </material>
+    </link>
+
+    <!-- Liên kết camera với robot -->
+    <joint name="stereo_camera_joint" type="fixed">
+        <parent link="tcp0"/>
+        <child link="stereo_camera_base"/>
+        <origin xyz="-0.06 0 0" rpy="0 -1.5708 0"/>
+    </joint>
+
+    <!-- Camera trái -->
+    <link name="left_camera_link">
+        <geometry>
+            <box size="0.025 0.025 0.01"/>  <!-- Pi Camera v2 nhỏ hơn  -->
+        </geometry>
+        <material name="red">
+            <color rgba="1 0 0 1"/>
+        </material>
+    </link>
+
+    <joint name="left_camera_joint" type="fixed">
+        <parent link="stereo_camera_base"/>
+        <child link="left_camera_link"/>
+        <origin xyz="0 0.035 0" rpy="0 0 0"/>  <!-- Baseline 7 cm -->
+    </joint>
+
+    <!-- Camera phải -->
+    <link name="right_camera_link">
+        <geometry>
+            <box size="0.025 0.025 0.01"/>
+        </geometry>
+        <material name="blue">
+            <color rgba="0 0 1 1"/>
+        </material>
+    </link>
+
+    <joint name="right_camera_joint" type="fixed">
+        <parent link="stereo_camera_base"/>
+        <child link="right_camera_link"/>
+        <origin xyz="0 -0.035 0" rpy="0 0 0"/>  <!-- Baseline 7 cm -->
+    </joint>
+
+    <!-- Mô phỏng camera trái -->
+    <gazebo reference="left_camera_link">
+        <sensor name="left_camera_sensor" type="camera">
+            <update_rate>30</update_rate>
+            <camera name="left">
+                <horizontal_fov>1.085</horizontal_fov>  <!-- Pi Camera v2 -->
+                <image>
+                    <width>1920</width>
+                    <height>1080</height>
+                    <format>R8G8B8</format>
+                </image>
+                <clip>
+                    <near>0.01</near>
+                    <far>50.0</far>
+                </clip>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>0.002</stddev>  <!-- Ít noise hơn -->
+                </noise>
+            </camera>
+            <plugin name="left_camera_plugin" filename="libgazebo_ros_camera.so">
+                <alwaysOn>true</alwaysOn>
+                <updateRate>30</updateRate>
+                <camera_name>/stereo/left</camera_name>
+                <imageTopicName>left/image_raw</imageTopicName>
+                <cameraInfoTopicName>left/camera_info</cameraInfoTopicName>
+                <frame_name>left_camera_link</frame_name>
+                <distortionK1>0.01</distortionK1>  <!-- Thêm một ít méo ảnh giống thực tế -->
+                <distortionK2>0.005</distortionK2>
+                <distortionK3>0.0</distortionK3>
+                <distortionT1>0.0005</distortionT1>
+                <distortionT2>0.0005</distortionT2>
+            </plugin>
+        </sensor>
+    </gazebo>
+
+    <!-- Mô phỏng camera phải -->
+    <gazebo reference="right_camera_link">
+        <sensor name="right_camera_sensor" type="camera">
+            <update_rate>30</update_rate>
+            <camera name="right">
+                <horizontal_fov>1.085</horizontal_fov>
+                <image>
+                    <width>1920</width>
+                    <height>1080</height>
+                    <format>R8G8B8</format>
+                </image>
+                <clip>
+                    <near>0.01</near>
+                    <far>50.0</far>
+                </clip>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>0.002</stddev>
+                </noise>
+            </camera>
+            <plugin name="right_camera_plugin" filename="libgazebo_ros_camera.so">
+                <alwaysOn>true</alwaysOn>
+                <updateRate>30</updateRate>
+                <camera_name>/stereo/right</camera_name>
+                <imageTopicName>right/image_raw</imageTopicName>
+                <cameraInfoTopicName>right/camera_info</cameraInfoTopicName>
+                <frame_name>right_camera_link</frame_name>
+                <distortionK1>0.01</distortionK1>
+                <distortionK2>0.005</distortionK2>
+                <distortionK3>0.0</distortionK3>
+                <distortionT1>0.0005</distortionT1>
+                <distortionT2>0.0005</distortionT2>
+            </plugin>
+        </sensor>
+    </gazebo>
+
+</robot>

@@ -1,0 +1,21 @@
+setup:
+  HomePose:
+  - 0.0
+  - 0.9517
+  - -1.4454
+  - 0.0
+  - -1.0594
+  - 0.0
+  DropPose:
+  - -1.57
+  - 0.0
+  - -1.57
+  - 0.0
+  - -1.57
+  - 0.0
+  OffSetDistance: 0.06
+  YOffSetDistance: 0.1
+  OffSetAngle: 6.28
+  FxOffset: 0.065
+  ObjectOffset: 0.16
+  Multi_collect_mode: false

@@ -1,0 +1,28 @@
+stereo_bm:
+  blockSize: 5
+  disp12MaxDiff: 1
+  numDisparities: 416
+  preFilterCap: 32
+  preFilterSize: 9
+  preFilterType: 1
+  speckleRange: 1
+  speckleWindowSize: 0
+  textureThreshold: 10
+  uniquenessRatio: 10
+  wls_lambda: 8000
+  wls_sigma: 1.5
+stereo_method: bm
+stereo_sgbm:
+  P1: 72
+  P2: 288
+  blockSize: 7
+  disp12MaxDiff: 1
+  minDisparity: 0
+  mode: 1
+  numDisparities: 416
+  preFilterCap: 32
+  speckleRange: 1
+  speckleWindowSize: 200
+  uniquenessRatio: 15
+  wls_lambda: 1000
+  wls_sigma: 1.0

@@ -1,0 +1,7 @@
+float64 start_positioning_time
+float64 end_time
+float64 start_detection
+bool check
+float64 total_time
+float64 detection_time
+float64 positioning_time
