@@ -127,7 +127,7 @@ struct ExecuteWorkflow
             feedback->progress = 0.10;
             goal_handle->publish_feedback(feedback);
 
-            self.setOctomapCollision(true);
+            //self.setOctomapCollision(true);
             self.callMoveRobot(
                 self.target_pose,
                 self.offsetPose(self.target_pose, 0.0, self.offset_distance_, 0.0),
@@ -147,7 +147,7 @@ struct ExecuteWorkflow
                 self.next_pose,
                 5,
                 1);
-            self.setOctomapCollision(false);
+            //self.setOctomapCollision(false);
             self.checkCollisionAtTarget(self.next_pose);
 
             feedback->progress = 0.55;
