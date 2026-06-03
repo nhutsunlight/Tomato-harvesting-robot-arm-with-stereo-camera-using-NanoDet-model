@@ -1,0 +1,15 @@
+# Goal
+int64 mode
+geometry_msgs/Pose start_pose
+geometry_msgs/Pose target_pose
+
+int64 id
+
+---
+# Result
+bool success
+string message
+
+---
+# Feedback
+float32 progress

@@ -1,0 +1,10 @@
+# Goal
+float64 position
+int64 id
+int64 pass_permit
+---
+# Result
+bool success
+---
+# Feedback
+string status
