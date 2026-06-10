@@ -624,7 +624,6 @@ private:
     {
         moveit_msgs::msg::PlanningScene planning_scene_msg;
         planning_scene_msg.is_diff = true;
-
         planning_scene_msg.world.octomap.octomap = octomap_to_apply;
         planning_scene_msg.world.octomap.header  = octomap_to_apply.header;
         planning_scene_msg.world.octomap.origin.orientation.w = 1.0;
@@ -829,12 +828,6 @@ private:
         }
 
         return true;
-    }
-
-    void applyMaskedOctomapForContacts(
-        const std::vector<CollisionInfo::ContactSample>& contact_samples, double clear_radius = 0.02)
-    {
-        (void)applyMaskedOctomapFromCache(contact_samples, clear_radius);
     }
 
     // ── Octomap geometry helpers ─────────────────────────────────────────
@@ -1181,6 +1174,62 @@ private:
         return range;
     }
 
+    // Check collision tại trạng thái hiện tại của robot (không cần IK).
+    // Dùng getCurrentState() từ move_group để lấy joint state thực tế.
+    // Returns CollisionInfo với collision=false nếu không có va chạm.
+    CollisionInfo checkCurrentStateCollision()
+    {
+        // Lấy current state từ move_group (reflect joint state thực của robot)
+        const auto current_state = move_group_interface_->getCurrentState(2.0);
+        if (!current_state) {
+            RCLCPP_WARN(get_logger(), "checkCurrentStateCollision: failed to get current state");
+            return CollisionInfo{};
+        }
+        return checkCollisionWithState(*current_state);
+    }
+
+    bool clearCurrentStateContacts(int max_iterations = 50)
+    {
+        for (int i = 0; i < max_iterations; ++i) {
+            // Lấy state thực của robot
+            const auto current_state = move_group_interface_->getCurrentState(2.0);
+            if (!current_state) {
+                RCLCPP_WARN(get_logger(), "clearCurrentStateContacts: failed to get current state");
+                return false;
+            }
+
+            current_state->update();
+
+            const auto col = checkCollisionWithState(*current_state);
+
+            if (!col.collision) {
+                RCLCPP_INFO(get_logger(),
+                    "clearCurrentStateContacts: no collision at iteration %d", i);
+                return true;
+            }
+
+            RCLCPP_WARN(get_logger(),
+                "clearCurrentStateContacts: collision detected (iter=%d, contacts=%zu, depth=%.4f), masking...",
+                i, col.contact_count, col.depth);
+
+            if (!applyMaskedOctomapFromCache(col.contact_points, 0.02)) {
+                RCLCPP_WARN(get_logger(),
+                    "clearCurrentStateContacts: applyMaskedOctomapFromCache failed");
+                return false;
+            }
+
+            // Refresh để cached_scene_ phản ánh octomap mới
+            while (rclcpp::ok() && !refreshPlanningScene()) {
+                RCLCPP_WARN(get_logger(), "clearCurrentStateContacts: retrying scene refresh...");
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            }
+        }
+
+        RCLCPP_ERROR(get_logger(),
+            "clearCurrentStateContacts: still in collision after %d iterations", max_iterations);
+        return false;
+    }
+
     // ════════════════════════════════════════════════════════════════════
     //  POSE COMPUTATION HELPERS
     // ════════════════════════════════════════════════════════════════════
@@ -1485,7 +1534,7 @@ private:
         return {roll_new, pitch_new};
     }
 
-// Tính basis (u, v) ổn định cho vector n bất kỳ.
+    // Tính basis (u, v) ổn định cho vector n bất kỳ.
     // Dùng Gram-Schmidt với danh sách fallback reference vectors
     // để đảm bảo u luôn nhất quán với cùng một n.
     static std::pair<Eigen::Vector3d, Eigen::Vector3d>
@@ -1577,124 +1626,184 @@ private:
     // ════════════════════════════════════════════════════════════════════
     //  POSE CHECK & RECOMPUTE
     // ════════════════════════════════════════════════════════════════════
+
+    // Helper: scan forward along the approach axis from the confirmed IK pose,
+    // masking any octomap voxels that block the path segment.
+    // Returns true if all iterations finished without error.
+    bool clearApproachPath(
+        const std::array<double, 6>& base_offset_pos,
+        const std::vector<double>& joint_values,
+        int max_crop_iters = 100)
+    {
+        std::unique_ptr<moveit::core::RobotState> sub_state;
+        for (int k = 1; k < max_crop_iters; ++k) {
+            compute_offset_position(
+                base_offset_pos[0], base_offset_pos[1], base_offset_pos[2],
+                base_offset_pos[3], base_offset_pos[4], base_offset_pos[5],
+                k * 0.01,
+                sub_test_position_ref_offset[0],
+                sub_test_position_ref_offset[1],
+                sub_test_position_ref_offset[2]);
+            sub_test_position_ref_offset[3] = base_offset_pos[3];
+            sub_test_position_ref_offset[4] = base_offset_pos[4];
+            sub_test_position_ref_offset[5] = base_offset_pos[5];
+
+            sub_input_test_pose = transformToBaseFrame(sub_test_position_ref_offset);
+            sub_found_test_ik   = solveIKWithSeed(sub_input_test_pose, joint_values, sub_state, 0.1);
+
+            if (!sub_found_test_ik || !sub_state) {
+                RCLCPP_WARN(get_logger(),
+                    "clearApproachPath: no IK at step %d, stopping early", k);
+                break;
+            }
+
+            const auto col = checkCollisionWithState(*sub_state);
+            if (!col.collision) {
+                RCLCPP_INFO(get_logger(),
+                    "clearApproachPath: path clear at step %d", k);
+                break;
+            }
+
+            if (!applyMaskedOctomapFromCache(col.contact_points, 0.02)) {
+                RCLCPP_WARN(get_logger(), "clearApproachPath: masked octomap failed");
+                return false;
+            }
+            while (rclcpp::ok() && !refreshPlanningScene()) {
+                RCLCPP_WARN(get_logger(), "Retrying refresh planning scene");
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            }
+        }
+        return true;
+    }
+
+    // Helper: iteratively mask small-depth contacts from the octomap until
+    // the given robot state is collision-free or max iterations are exhausted.
+    // Returns true if contacts were cleared, false otherwise.
+    bool clearSmallContacts(
+        moveit::core::RobotState& ik_state,
+        CollisionInfo& col,
+        int max_crop_iters = 100)
+    {
+        for (int k = 0; k < max_crop_iters; ++k) {
+            if (!col.collision) return true;
+            if (!applyMaskedOctomapFromCache(col.contact_points, 0.02)) {
+                RCLCPP_WARN(get_logger(), "clearSmallContacts: masked octomap failed");
+                return false;
+            }
+            while (rclcpp::ok() && !refreshPlanningScene()) {
+                RCLCPP_WARN(get_logger(), "Retrying refresh planning scene");
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            }
+            col = checkCollisionWithState(ik_state);
+        }
+        return false;  // still in collision after max iterations
+    }
+
     void posecheck_and_recompute(
         const std::array<double, 10>& test_position,
         const std::vector<double>& test_joint_values,
         std::size_t idx)
     {
-        test_position_ref = { test_position[0], test_position[1], test_position[2],
-                              test_position[3], test_position[4], test_position[5]};
+        test_position_ref = {
+            test_position[0], test_position[1], test_position[2],
+            test_position[3], test_position[4], test_position[5]
+        };
         test_position_ref_offset = test_position_ref;
-        found_test_ik = false; obs_check = true;
-        //auto range = getOrientationRange(test_position_ref[0], test_position_ref[1], test_position_ref[2],
-        //                test_position_ref[5], test_joint_values, M_PI / 2.0, M_PI / 18.0);
-        //RCLCPP_INFO(get_logger(), "Initial orientation range: roll=[%.3f, %.3f] pitch=[%.3f, %.3f]",
-        //    range.roll_min, range.roll_max, range.pitch_min, range.pitch_max);
+        found_test_ik = false;
+        obs_check     = true;
+
         const int max_iterations = 100;
         int iteration = 0;
+
         while (rclcpp::ok() && iteration < max_iterations) {
-            iteration++;
+            ++iteration;
+
+            // ── Compute offset pose ───────────────────────────────────────
             compute_offset_position(
                 test_position_ref[0], test_position_ref[1], test_position_ref[2],
                 test_position_ref[3], test_position_ref[4], test_position_ref[5],
                 object_offset_,
-                test_position_ref_offset[0], test_position_ref_offset[1], test_position_ref_offset[2]);
+                test_position_ref_offset[0],
+                test_position_ref_offset[1],
+                test_position_ref_offset[2]);
             test_position_ref_offset[3] = test_position_ref[3];
             test_position_ref_offset[4] = test_position_ref[4];
-            //test_position_ref_offset[5] = test_position_ref[5];
             input_test_pose = transformToBaseFrame(test_position_ref_offset);
+
+            // ── Solve IK ──────────────────────────────────────────────────
             std::unique_ptr<moveit::core::RobotState> ik_state;
             found_test_ik = solveIKWithSeed(input_test_pose, test_joint_values, ik_state, 0.1);
+
             CollisionInfo col;
             obs_check = false;
+
             if (found_test_ik && ik_state) {
-                col = checkCollisionWithState(*ik_state);
+                col       = checkCollisionWithState(*ik_state);
                 obs_check = col.collision;
+
+                // ── Small-depth contact: try masking octomap voxels ───────
                 constexpr double kSmallContactDepth = 0.02;
                 if (obs_check && col.depth < kSmallContactDepth) {
-                    const int max_crop_iterations = 100;
-                    //bool cleared_contact = false;
-                    for (int crop_iteration = 0; crop_iteration < max_crop_iterations; ++crop_iteration) {
-                        if (col.collision) {
-                            if (!applyMaskedOctomapFromCache(col.contact_points, 0.02)) {
-                                RCLCPP_WARN(get_logger(), "Masked octomap apply from cache failed");
-                                break;
-                            }
-                            if (!refreshPlanningScene()) {
-                                RCLCPP_WARN(get_logger(), "Failed to refresh planning scene before masked apply");
-                                break;
-                            }
-                        } else {
-                            obs_check = false;// cleared_contact = true;
-                            RCLCPP_INFO(get_logger(), "Contact cleared after masked octomap apply at crop iteration %d", crop_iteration);
-                            break;
-                        }
-                        col = checkCollisionWithState(*ik_state);
+                    const bool cleared = clearSmallContacts(*ik_state, col);
+                    obs_check = col.collision;   // updated by clearSmallContacts
+                    if (!cleared) {
+                        RCLCPP_WARN(get_logger(),
+                            "Small contacts not cleared for idx %zu, continuing sweep", idx);
+                        obs_check = true;
                     }
-                    //if (cleared_contact) { target_position_[idx][3] = test_position_ref[3]; target_position_[idx][4] = test_position_ref[4]; break; }
-                    //RCLCPP_WARN(get_logger(), "Small-depth contact did not clear after repeated crop; skip recompute for idx %zu", idx);
-                    obs_check = true;
                 }
             }
+
+            // ── Pass: IK found and collision-free ─────────────────────────
             if (found_test_ik && !obs_check) {
                 RCLCPP_INFO(get_logger(), "IK found at iteration %d", iteration);
-                target_position_[idx][3] = test_position_ref[3]; target_position_[idx][4] = test_position_ref[4];
-                const int max_crop_iterations = 100;
-                std::unique_ptr<moveit::core::RobotState> sub_ik_state;
-                for (int crop_iteration = 1; crop_iteration < max_crop_iterations; ++crop_iteration) {
-                    compute_offset_position(
-                        test_position_ref_offset[0], test_position_ref_offset[1], test_position_ref_offset[2],
-                        test_position_ref_offset[3], test_position_ref_offset[4], test_position_ref_offset[5],
-                        crop_iteration * 0.01,  // increase offset for next crop
-                        sub_test_position_ref_offset[0], sub_test_position_ref_offset[1], sub_test_position_ref_offset[2]);
-                    sub_test_position_ref_offset[3] = test_position_ref_offset[3];
-                    sub_test_position_ref_offset[4] = test_position_ref_offset[4];
-                    sub_test_position_ref_offset[5] = test_position_ref_offset[5];    
-                    sub_input_test_pose = transformToBaseFrame(sub_test_position_ref_offset);
-                    sub_found_test_ik = solveIKWithSeed(sub_input_test_pose, test_joint_values, sub_ik_state, 0.1);
-                    col = checkCollisionWithState(*sub_ik_state);
-                    if (col.collision) {
-                        if (!applyMaskedOctomapFromCache(col.contact_points, 0.02)) {
-                            RCLCPP_WARN(get_logger(), "Masked octomap apply from cache failed");
-                            break;
-                        }
-                        if (!refreshPlanningScene()) {
-                            RCLCPP_WARN(get_logger(), "Failed to refresh planning scene before masked apply");
-                            break;
-                        }
-                    } else {
-                        RCLCPP_INFO(get_logger(), "Contact cleared after masked octomap apply at crop iteration %d", crop_iteration);
-                        break;
-                    }
-                }
+                target_position_[idx][3] = test_position_ref[3];
+                target_position_[idx][4] = test_position_ref[4];
+
+                // Scan approach path and pre-clear any blocking voxels
+                clearApproachPath(test_position_ref_offset, test_joint_values);
                 break;
             }
-            //if (!recompute) { RCLCPP_WARN(get_logger(), "Recompute converged but IK still not found for idx %zu", idx); break; }
-            RCLCPP_WARN(get_logger(), "Recompute for pose idx %zu, iteration %d", idx, iteration);
+
+            // ── Adjust roll/pitch for next iteration ──────────────────────
+            RCLCPP_WARN(get_logger(),
+                "Recompute for pose idx %zu, iteration %d", idx, iteration);
+
+            const double theta   = static_cast<double>(iteration) * M_PI / 5.0;
+            const double penalty = static_cast<double>(iteration) / 100.0;
+
             if (!found_test_ik) {
-                RCLCPP_WARN(get_logger(), "No IK found, adjusting roll/pitch based on XYZ offset");
-                //auto [test_roll, test_pitch] = computeRollPitchFromXYZ(
-                //    test_position_ref[0], test_position_ref[1], test_position_ref[2],
-                //    test_position_ref[3], test_position_ref[4]);
-                auto [test_roll, test_pitch] = estimateRollPitchFromTheta(
-                    Eigen::Vector3d(test_position_ref[0], test_position_ref[1], test_position_ref[2]),
-                    iteration * M_PI / 5, iteration/100.0, near_tcp_range_, tcp_range_ + offset_distance_);
-                RCLCPP_INFO(get_logger(), "Adjusted roll=%.3f pitch=%.3f for IK search", test_roll, test_pitch);
-                test_position_ref[3] = test_roll; test_position_ref[4] = test_pitch;
+                RCLCPP_WARN(get_logger(),
+                    "No IK found, adjusting roll/pitch via theta sweep");
+                const auto [r, p] = estimateRollPitchFromTheta(
+                    Eigen::Vector3d(test_position_ref[0],
+                                    test_position_ref[1],
+                                    test_position_ref[2]),
+                    theta, penalty, near_tcp_range_, tcp_range_ + offset_distance_);
+                RCLCPP_INFO(get_logger(), "Adjusted roll=%.3f pitch=%.3f", r, p);
+                test_position_ref[3] = r;
+                test_position_ref[4] = p;
             } else {
-                RCLCPP_WARN(get_logger(), "IK found but in collision, adjusting roll/pitch based on contact normal");
-                //auto [test_roll, test_pitch] = computeRollPitchFromCollision(
-                //    col.normal, col.depth, test_position_ref[3], test_position_ref[4]);
-                auto [test_roll, test_pitch] = computeRollPitchFromCollision(
-                    Eigen::Vector3d(test_position_ref[0], test_position_ref[1], test_position_ref[2]),
+                RCLCPP_WARN(get_logger(),
+                    "IK in collision (depth=%.4f), adjusting via collision avoidance",
+                    col.depth);
+                const auto [r, p] = computeRollPitchFromCollision(
+                    Eigen::Vector3d(test_position_ref[0],
+                                    test_position_ref[1],
+                                    test_position_ref[2]),
                     col.position,
                     test_position_ref[3], test_position_ref[4],
-                    near_tcp_range_, tcp_range_ + offset_distance_, iteration/100.0);
-                RCLCPP_INFO(get_logger(), "Adjusted roll=%.3f pitch=%.3f for collision avoidance", test_roll, test_pitch);
-                test_position_ref[3] = test_roll; test_position_ref[4] = test_pitch;
+                    near_tcp_range_, tcp_range_ + offset_distance_, penalty);
+                RCLCPP_INFO(get_logger(), "Adjusted roll=%.3f pitch=%.3f", r, p);
+                test_position_ref[3] = r;
+                test_position_ref[4] = p;
             }
         }
-        if (iteration >= max_iterations) RCLCPP_ERROR(get_logger(), "Max recompute iterations reached for idx %zu", idx);
+
+        if (iteration >= max_iterations)
+            RCLCPP_ERROR(get_logger(),
+                "Max recompute iterations reached for idx %zu", idx);
+
         pose_check = found_test_ik && !obs_check;
     }
 
@@ -1948,8 +2057,9 @@ private:
             publisher_callback(true, now().seconds(), true, mul_mode_);
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-            if (!refreshPlanningScene()) {
-                RCLCPP_ERROR(get_logger(), "Failed to refresh planning scene, skip iteration %zu", i); continue;
+            while (rclcpp::ok() && !refreshPlanningScene()) {
+                RCLCPP_WARN(get_logger(), "Retrying refresh planning scene");
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
             }
 
             RCLCPP_INFO(get_logger(), "[Loop Debug] i=%zu / total=%zu | mul_mode=%s | time=%.3f",
@@ -1993,12 +2103,10 @@ private:
             goal_handle->publish_feedback(feedback);
 
             ocotmapCombine();
-
-            if (!refreshPlanningScene()) {
-                RCLCPP_ERROR(get_logger(), "Failed to refresh planning scene after octomap apply");
-                continue;
+            while (rclcpp::ok() && !refreshPlanningScene()) {
+                RCLCPP_WARN(get_logger(), "Retrying refresh planning scene");
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
             }
-
             callMoveRobot(offsetPose(target_pose, 0.0, offset_distance_, 0.0), target_pose, 1, 2);
 
             if (!move_success_) {
@@ -2109,9 +2217,9 @@ private:
                 publisher_callback(true, now().seconds(), true, mul_mode_);
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-                if (!refreshPlanningScene()) {
-                    RCLCPP_ERROR(get_logger(), "Failed to refresh planning scene after octomap apply, skip iteration %zu", orig_i);
-                    continue;
+                while (rclcpp::ok() && !refreshPlanningScene()) {
+                    RCLCPP_WARN(get_logger(), "Retrying refresh planning scene for cluster %zu, member %zu", ci + 1, mi + 1);
+                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 }
 
                 RCLCPP_INFO(get_logger(), "[Loop Debug] i=%zu / total=%zu | mul_mode=%s | time=%.3f",
@@ -2138,41 +2246,15 @@ private:
 
                     ocotmapCombine();
 
-                    if (!refreshPlanningScene()) {
-                        RCLCPP_ERROR(get_logger(), "Failed to refresh planning scene after octomap apply");
-                        continue;
+                    while (rclcpp::ok() && !refreshPlanningScene()) {
+                        RCLCPP_WARN(get_logger(), "Retrying refresh planning scene");
+                        std::this_thread::sleep_for(std::chrono::milliseconds(100));
                     }
 
                     //setOctomapCollision(true);
                     callMoveRobot(
                         offsetPose(current_target.pose, 0.0, offset_distance_, 0.0),
                         current_target.pose, 1, 0);
-
-                    if (!move_success_) {
-                        for (size_t retry = 0; retry < 5; ++retry) {
-                            RCLCPP_ERROR(get_logger(), "Failed to move to first target in cluster, retrying... (attempt %ld)", retry + 1);
-                            callMoveRobot(
-                                offsetPose(current_target.pose, 0.0, offset_distance_, 0.0),
-                                offsetPose(current_target.pose, 0.0, offset_distance_ + 0.1 * (retry + 1), 0.0), 
-                                1, 0);
-                            if (move_success_) 
-                            {
-                                temp_pose = offsetPose(current_target.pose, 0.0, offset_distance_ + 0.1 * (retry + 1), 0.0);
-                                break;
-                            }    
-                        }
-
-                        if (!move_success_) {
-                            RCLCPP_ERROR(get_logger(), "Failed to move");
-                            continue;
-                        }
-                        setOctomapCollision(true);
-                        callMoveRobot(
-                            temp_pose,
-                            offsetPose(current_target.pose, 0.0, offset_distance_, 0.0), 
-                            1, 1);
-                        setOctomapCollision(false);
-                    }
 
                     if (!move_success_) {
                         RCLCPP_ERROR(get_logger(), "Failed to move to first target in cluster, skipping cluster");
@@ -2192,39 +2274,13 @@ private:
                 }
 
                 ocotmapCombine();
-
-                if (!refreshPlanningScene()) {
-                    RCLCPP_ERROR(get_logger(), "Failed to refresh planning scene after octomap apply");
-                    continue;
+                while (rclcpp::ok() && !refreshPlanningScene()) {
+                    RCLCPP_WARN(get_logger(), "Retrying refresh planning scene");
+                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 }
                 //setOctomapCollision(true);
                 callMoveRobot(previous_target.pose, current_target.pose, step_id, 1);
 
-                if (!move_success_) {
-                    for (size_t retry = 0; retry < 5; ++retry) {
-                        RCLCPP_ERROR(get_logger(), "Failed to move to first target in cluster, retrying... (attempt %ld)", retry + 1);
-                        callMoveRobot(
-                            offsetPose(current_target.pose, 0.0, offset_distance_, 0.0),
-                            offsetPose(current_target.pose, 0.0, offset_distance_ + 0.1 * (retry + 1), 0.0), 
-                            1, 0);
-                        if (move_success_) 
-                        {
-                            temp_pose = offsetPose(current_target.pose, 0.0, offset_distance_ + 0.1 * (retry + 1), 0.0);
-                            break;
-                        }    
-                    }
-
-                    if (!move_success_) {
-                        RCLCPP_ERROR(get_logger(), "Failed to move");
-                        continue;
-                    }
-                    setOctomapCollision(true);
-                    callMoveRobot(
-                        temp_pose,
-                        offsetPose(current_target.pose, 0.0, offset_distance_, 0.0), 
-                        1, 1);
-                    setOctomapCollision(false);
-                }
                 if (!move_success_) {
                     RCLCPP_ERROR(get_logger(), "Failed to move to target, skipping remaining targets in cluster");
                     continue;
@@ -2243,11 +2299,15 @@ private:
 
             if (last_cluster_reachable) {
                 applyOctocmapFromTemp();
-                if (!refreshPlanningScene()) {
-                    RCLCPP_ERROR(get_logger(), "Failed to refresh planning scene after octomap apply");
-                    continue;
+                while (rclcpp::ok() && !refreshPlanningScene()) {
+                    RCLCPP_WARN(get_logger(), "Retrying refresh planning scene");
+                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 }
                 callMoveToHome(home_position_, step_id++);
+                if (!move_success_) {
+                    clearCurrentStateContacts();
+                    callMoveToHome(home_position_, step_id++);
+                }
                 feedback->progress = 1.0; goal_handle->publish_feedback(feedback);
                 result->message = "Robot come to home!";
                 RCLCPP_INFO(get_logger(), "time: %f", now().seconds());
