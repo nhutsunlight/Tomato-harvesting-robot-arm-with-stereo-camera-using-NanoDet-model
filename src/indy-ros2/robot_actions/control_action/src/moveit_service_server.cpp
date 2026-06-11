@@ -219,6 +219,7 @@ private:
     std::array<double, 6>               test_position_ref_offset;
     std::array<double, 6>               target_idx_position_;
     std::array<double, 6>               sub_test_position_ref_offset;
+    std::array<double, 6>               previous_position_;
     std::vector<double>                 home_position_;
     std::vector<double>                 drop_position_;
     std::vector<geometry_msgs::msg::Pose> target_pose_list_;
@@ -492,9 +493,15 @@ private:
     bool refreshPlanningScene()
     {
         using GetPlanningScene = moveit_msgs::srv::GetPlanningScene;
+ 
+        // Reset flag trước — bắt buộc waitForSceneReady() phải chờ build xong
+        scene_valid_.store(false, std::memory_order_release);
+ 
         if (!planning_scene_client_->wait_for_service(std::chrono::seconds(3))) {
-            RCLCPP_ERROR(get_logger(), "Service /get_planning_scene not available"); return false;
+            RCLCPP_ERROR(get_logger(), "Service /get_planning_scene not available");
+            return false;
         }
+ 
         auto request = std::make_shared<GetPlanningScene::Request>();
         request->components.components =
             moveit_msgs::msg::PlanningSceneComponents::SCENE_SETTINGS        |
@@ -502,21 +509,27 @@ private:
             moveit_msgs::msg::PlanningSceneComponents::WORLD_OBJECT_GEOMETRY |
             moveit_msgs::msg::PlanningSceneComponents::ALLOWED_COLLISION_MATRIX |
             moveit_msgs::msg::PlanningSceneComponents::OCTOMAP;
-
+ 
         std::promise<GetPlanningScene::Response::SharedPtr> promise;
         auto fut = promise.get_future();
-        planning_scene_client_->async_send_request(request,
+        planning_scene_client_->async_send_request(
+            request,
             [&promise](rclcpp::Client<GetPlanningScene>::SharedFuture f) {
                 promise.set_value(f.get());
             });
+ 
         if (fut.wait_for(std::chrono::seconds(3)) != std::future_status::ready) {
-            RCLCPP_ERROR(get_logger(), "Timeout getting planning scene"); return false;
+            RCLCPP_ERROR(get_logger(), "Timeout getting planning scene");
+            return false;
         }
+ 
         auto response    = fut.get();
         auto robot_model = move_group_interface_->getRobotModel();
-        auto new_scene   = std::make_shared<planning_scene::PlanningScene>(robot_model);
+ 
+        auto new_scene = std::make_shared<planning_scene::PlanningScene>(robot_model);
         new_scene->setPlanningSceneDiffMsg(response->scene);
-        setScene(new_scene);
+ 
+        setScene(new_scene);  // sets scene_valid_ = true
         return true;
     }
 
@@ -628,39 +641,36 @@ private:
         planning_scene_msg.world.octomap.header  = octomap_to_apply.header;
         planning_scene_msg.world.octomap.origin.orientation.w = 1.0;
 
-        if (!apply_client_->wait_for_service(std::chrono::seconds(3)))
-        {
-            RCLCPP_ERROR(
-                get_logger(),
-                "Service /apply_planning_scene not available");
+        if (!apply_client_->wait_for_service(std::chrono::seconds(3))) {
+            RCLCPP_ERROR(get_logger(), "Service /apply_planning_scene not available");
             return false;
         }
 
-        auto request =
-            std::make_shared<
-                moveit_msgs::srv::ApplyPlanningScene::Request>();
-
+        auto request = std::make_shared<moveit_msgs::srv::ApplyPlanningScene::Request>();
         request->scene = planning_scene_msg;
 
-        auto future =
-            apply_client_->async_send_request(request);
+        // ✅ Dùng shared_ptr để tránh dangling reference khi lambda capture
+        auto promise_ptr = std::make_shared<std::promise<moveit_msgs::srv::ApplyPlanningScene::Response::SharedPtr>>();
+        auto future = promise_ptr->get_future();
 
-        if (future.wait_for(std::chrono::seconds(10))
-            != std::future_status::ready)
-        {
-            RCLCPP_ERROR(
-                get_logger(),
-                "Timeout applying octomap");
+        apply_client_->async_send_request(request,
+            [promise_ptr](rclcpp::Client<moveit_msgs::srv::ApplyPlanningScene>::SharedFuture f) {
+                // ✅ Chỉ set_value nếu chưa set — tránh double-set
+                try {
+                    promise_ptr->set_value(f.get());
+                } catch (...) {
+                    // promise đã bị set hoặc future invalid — bỏ qua
+                }
+            });
+
+        if (future.wait_for(std::chrono::seconds(10)) != std::future_status::ready) {
+            RCLCPP_ERROR(get_logger(), "Timeout applying octomap");
             return false;
         }
 
         auto response = future.get();
-
-        if (!response || !response->success)
-        {
-            RCLCPP_ERROR(
-                get_logger(),
-                "ApplyPlanningScene failed");
+        if (!response || !response->success) {
+            RCLCPP_ERROR(get_logger(), "ApplyPlanningScene failed");
             return false;
         }
 
@@ -668,27 +678,47 @@ private:
         return true;
     }
 
-    void applyOctomap(int x1, int y1, int x2, int y2, float fx, float fy, float cx, float cy)
+    void applyOctomap(
+        int x1, int y1, int x2, int y2,
+        float fx, float fy, float cx, float cy)
     {
         octomap_msgs::msg::Octomap octomap_to_apply;
         {
             std::lock_guard<std::mutex> lock(octomap_map_mutex_);
-            if (!obs_ready) { RCLCPP_WARN(this->get_logger(), "No octomap ready"); return; }
+            if (!obs_ready) {
+                RCLCPP_WARN(this->get_logger(), "No octomap ready");
+                return;
+            }
             octomap_to_apply = octomap_single_;
         }
-        octomap_to_apply = cropOctomapByBbox(octomap_to_apply, x1, y1, x2, y2, fx, fy, cx, cy);
+ 
+        octomap_to_apply = cropOctomapByBbox(
+            octomap_to_apply, x1, y1, x2, y2, fx, fy, cx, cy);
         {
             std::lock_guard<std::mutex> lock(octomap_map_mutex_);
-            octomap_to_apply = transformOctomapWithTransform(octomap_to_apply, octomap_to_link0_tf_);
+            octomap_to_apply = transformOctomapWithTransform(
+                octomap_to_apply, octomap_to_link0_tf_);
         }
-        RCLCPP_INFO(this->get_logger(), "Cropped octomap (bbox=[%d,%d,%d,%d])", x1, y1, x2, y2);
-        if (octomap_to_apply.header.frame_id.empty()) octomap_to_apply.header.frame_id = "link0";
+ 
+        RCLCPP_INFO(this->get_logger(),
+            "Cropped octomap (bbox=[%d,%d,%d,%d])", x1, y1, x2, y2);
+ 
+        if (octomap_to_apply.header.frame_id.empty()) {
+            octomap_to_apply.header.frame_id = "link0";
+        }
+ 
         octomap_cache_ = octomap_to_apply;
         octomap_cache_valid_ = true;
-        while (rclcpp::ok() && !applyOctomapMessage(octomap_to_apply, "Octomap applied from msg")) {
+ 
+        while(rclcpp::ok() && !applyOctomapMessage(octomap_to_apply, "Octomap applied from msg"))
+        {
             RCLCPP_WARN(this->get_logger(), "Retrying to apply octomap from msg...");
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
         }
+ 
+        // Wait for move_group to fully process the applied octomap before
+        // refreshPlanningScene() reads it back — prevents stale scene cache.
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
 
     void applyOctomapTemp()   { octomap_temp_ = octomap_cache_; }
@@ -1658,19 +1688,24 @@ private:
             }
 
             const auto col = checkCollisionWithState(*sub_state);
-            if (!col.collision) {
+            if (!col.collision && k >= 30) {
                 RCLCPP_INFO(get_logger(),
                     "clearApproachPath: path clear at step %d", k);
                 break;
             }
-
-            if (!applyMaskedOctomapFromCache(col.contact_points, 0.02)) {
-                RCLCPP_WARN(get_logger(), "clearApproachPath: masked octomap failed");
-                return false;
-            }
-            while (rclcpp::ok() && !refreshPlanningScene()) {
-                RCLCPP_WARN(get_logger(), "Retrying refresh planning scene");
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            RCLCPP_WARN(get_logger(),
+                "clearApproachPath: collision at step %d (contacts=%zu, depth=%.4f), masking...",
+                k, col.contact_count, col.depth);
+            if (col.collision)
+            {
+                if (!applyMaskedOctomapFromCache(col.contact_points, 0.02)) {
+                    RCLCPP_WARN(get_logger(), "clearApproachPath: masked octomap failed");
+                    return false;
+                }
+                while (rclcpp::ok() && !refreshPlanningScene()) {
+                    RCLCPP_WARN(get_logger(), "Retrying refresh planning scene");
+                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                }
             }
         }
         return true;
@@ -2254,7 +2289,30 @@ private:
                     //setOctomapCollision(true);
                     callMoveRobot(
                         offsetPose(current_target.pose, 0.0, offset_distance_, 0.0),
-                        current_target.pose, 1, 0);
+                        current_target.pose, step_id, 1);
+
+                    if (!move_success_) {
+                        for (size_t retry = 1; retry < 4; ++retry) {
+                            RCLCPP_WARN(get_logger(), "Retrying move to first target in cluster (attempt %zu)", retry + 1);
+                            callMoveRobot(
+                                offsetPose(current_target.pose, 0.0, offset_distance_, 0.0),
+                                offsetPose(current_target.pose, 0.0, offset_distance_ + retry * 0.1, 0.0), 
+                                step_id, 1);
+                            if (move_success_) 
+                            {   
+                                temp_pose = offsetPose(current_target.pose, 0.0, offset_distance_ + retry * 0.1, 0.0);
+                                break;
+                            }
+                        }
+                        setOctomapCollision(true);
+                        if (move_success_) {
+                            callMoveRobot(
+                                temp_pose,
+                                offsetPose(current_target.pose, 0.0, offset_distance_, 0.0), 
+                                step_id, 1);
+                            setOctomapCollision(false);
+                        }
+                    }
 
                     if (!move_success_) {
                         RCLCPP_ERROR(get_logger(), "Failed to move to first target in cluster, skipping cluster");
@@ -2268,6 +2326,7 @@ private:
                     //setOctomapCollision(false);
 
                     previous_target = current_target;
+                    std::copy_n(raw.begin(), 6, previous_position_.begin());
                     cluster_started = true;
                     success_count++;
                     continue;
@@ -2280,7 +2339,27 @@ private:
                 }
                 //setOctomapCollision(true);
                 callMoveRobot(previous_target.pose, current_target.pose, step_id, 1);
-
+                if (!move_success_) {
+                    for (size_t retry = 1; retry < 4; ++retry) {
+                        RCLCPP_WARN(get_logger(), "Retrying move to first target in cluster (attempt %zu)", retry + 1);
+                        callMoveRobot(
+                            offsetPose(current_target.pose, 0.0, offset_distance_, 0.0),
+                            offsetPose(current_target.pose, 0.0, offset_distance_ + retry * 0.1, 0.0), 
+                            step_id, 1);
+                        if (move_success_) 
+                        {   
+                            temp_pose = offsetPose(current_target.pose, 0.0, offset_distance_ + retry * 0.1, 0.0);
+                            break;
+                        }
+                    }
+                    if (move_success_) {
+                        callMoveRobot(
+                            temp_pose,
+                            offsetPose(current_target.pose, 0.0, offset_distance_, 0.0), 
+                            step_id, 1);
+                        setOctomapCollision(false);
+                    }
+                }
                 if (!move_success_) {
                     RCLCPP_ERROR(get_logger(), "Failed to move to target, skipping remaining targets in cluster");
                     continue;
@@ -2294,6 +2373,7 @@ private:
                 feedback->progress = 0.10f + 0.15f * ratio; goal_handle->publish_feedback(feedback);
 
                 previous_target = current_target;
+                std::copy_n(raw.begin(), 6, previous_position_.begin());
                 success_count++;
             }
 
@@ -2306,6 +2386,7 @@ private:
                 callMoveToHome(home_position_, step_id++);
                 if (!move_success_) {
                     clearCurrentStateContacts();
+                    clearApproachPath(previous_position_, home_position_);
                     callMoveToHome(home_position_, step_id++);
                 }
                 feedback->progress = 1.0; goal_handle->publish_feedback(feedback);
