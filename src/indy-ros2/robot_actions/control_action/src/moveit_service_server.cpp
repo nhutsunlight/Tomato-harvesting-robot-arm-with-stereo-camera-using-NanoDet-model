@@ -168,7 +168,7 @@ public:
     void initialize() {
         move_group_interface_ = std::make_unique<MoveGroupInterface>(shared_from_this(), "indy_manipulator");
         saveOriginalACM();
-        setGripperIgnoreCollision(true);
+        //setGripperIgnoreCollision(true);
         near_tcp_range_ = estimateLink5MaxReach("link5");
         tcp_range_ = estimateLink5MaxReach("tcp0");
     }
@@ -1204,20 +1204,6 @@ private:
         return range;
     }
 
-    // Check collision tại trạng thái hiện tại của robot (không cần IK).
-    // Dùng getCurrentState() từ move_group để lấy joint state thực tế.
-    // Returns CollisionInfo với collision=false nếu không có va chạm.
-    CollisionInfo checkCurrentStateCollision()
-    {
-        // Lấy current state từ move_group (reflect joint state thực của robot)
-        const auto current_state = move_group_interface_->getCurrentState(2.0);
-        if (!current_state) {
-            RCLCPP_WARN(get_logger(), "checkCurrentStateCollision: failed to get current state");
-            return CollisionInfo{};
-        }
-        return checkCollisionWithState(*current_state);
-    }
-
     bool clearCurrentStateContacts(int max_iterations = 50)
     {
         for (int i = 0; i < max_iterations; ++i) {
@@ -1670,7 +1656,7 @@ private:
             compute_offset_position(
                 base_offset_pos[0], base_offset_pos[1], base_offset_pos[2],
                 base_offset_pos[3], base_offset_pos[4], base_offset_pos[5],
-                k * 0.01,
+                - k * 0.01,
                 sub_test_position_ref_offset[0],
                 sub_test_position_ref_offset[1],
                 sub_test_position_ref_offset[2]);
@@ -1696,7 +1682,7 @@ private:
             RCLCPP_WARN(get_logger(),
                 "clearApproachPath: collision at step %d (contacts=%zu, depth=%.4f), masking...",
                 k, col.contact_count, col.depth);
-            if (col.collision)
+            if (col.collision && col.depth <= 0.02)
             {
                 if (!applyMaskedOctomapFromCache(col.contact_points, 0.02)) {
                     RCLCPP_WARN(get_logger(), "clearApproachPath: masked octomap failed");
@@ -1814,7 +1800,7 @@ private:
                     Eigen::Vector3d(test_position_ref[0],
                                     test_position_ref[1],
                                     test_position_ref[2]),
-                    theta, penalty, near_tcp_range_, tcp_range_ + offset_distance_);
+                    theta, penalty, near_tcp_range_, tcp_range_);
                 RCLCPP_INFO(get_logger(), "Adjusted roll=%.3f pitch=%.3f", r, p);
                 test_position_ref[3] = r;
                 test_position_ref[4] = p;
@@ -1828,7 +1814,7 @@ private:
                                     test_position_ref[2]),
                     col.position,
                     test_position_ref[3], test_position_ref[4],
-                    near_tcp_range_, tcp_range_ + offset_distance_, penalty);
+                    near_tcp_range_, tcp_range_, penalty);
                 RCLCPP_INFO(get_logger(), "Adjusted roll=%.3f pitch=%.3f", r, p);
                 test_position_ref[3] = r;
                 test_position_ref[4] = p;
@@ -2242,12 +2228,21 @@ private:
                 const auto& raw    = cluster[mi].pose;
                 const size_t orig_i = cluster[mi].original_idx;
 
+                //const int exp_y1 = 2*target_position_[orig_i][7] - 1*target_position_[orig_i][9], exp_y2 = 2*target_position_[orig_i][9] - 1*target_position_[orig_i][7];
+                //const int exp_x1 = 2*target_position_[orig_i][6] - 1*target_position_[orig_i][8], exp_x2 = 2*target_position_[orig_i][8] - 1*target_position_[orig_i][6];
+
                 applyOctomap(
                     static_cast<int>(target_position_[orig_i][6]),
                     static_cast<int>(target_position_[orig_i][7]),
                     static_cast<int>(target_position_[orig_i][8]),
                     static_cast<int>(target_position_[orig_i][9]),
                     fx_, fy_, cx_, cy_);
+                //applyOctomap(
+                //    exp_x1,
+                //    exp_y1,
+                //    exp_x2,
+                //    exp_y2,
+                //    fx_, fy_, cx_, cy_);
                 pass_all_ = false; bypass = false;
                 publisher_callback(true, now().seconds(), true, mul_mode_);
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -2260,6 +2255,10 @@ private:
                 RCLCPP_INFO(get_logger(), "[Loop Debug] i=%zu / total=%zu | mul_mode=%s | time=%.3f",
                             orig_i, cluster.size(), mul_mode_ ? "true" : "false", now().seconds());
 
+                RCLCPP_INFO(get_logger(), "Input target: x=%.2f y=%.2f z=%.2f r=%.2f p=%.2f y=%.2f",
+                            target_position_[orig_i][0], target_position_[orig_i][1], target_position_[orig_i][2],
+                            target_position_[orig_i][3], target_position_[orig_i][4], target_position_[orig_i][5]);
+                
                 posecheck_and_recompute(raw, home_position_, orig_i);
                 const auto& checked_target = target_position_[orig_i];
                 target_pose = targetPositionToBasePose(orig_i);
@@ -2289,26 +2288,26 @@ private:
                     //setOctomapCollision(true);
                     callMoveRobot(
                         offsetPose(current_target.pose, 0.0, offset_distance_, 0.0),
-                        current_target.pose, step_id, 1);
+                        current_target.pose, step_id, 2);
 
                     if (!move_success_) {
                         for (size_t retry = 1; retry < 4; ++retry) {
                             RCLCPP_WARN(get_logger(), "Retrying move to first target in cluster (attempt %zu)", retry + 1);
                             callMoveRobot(
                                 offsetPose(current_target.pose, 0.0, offset_distance_, 0.0),
-                                offsetPose(current_target.pose, 0.0, offset_distance_ + retry * 0.1, 0.0), 
-                                step_id, 1);
+                                offsetPose(current_target.pose, 0.0, - retry * 0.1, 0.0), 
+                                step_id, 2);
                             if (move_success_) 
                             {   
-                                temp_pose = offsetPose(current_target.pose, 0.0, offset_distance_ + retry * 0.1, 0.0);
+                                temp_pose = offsetPose(current_target.pose, 0.0, - retry * 0.1, 0.0);
                                 break;
                             }
                         }
-                        setOctomapCollision(true);
                         if (move_success_) {
+                            setOctomapCollision(true);
                             callMoveRobot(
                                 temp_pose,
-                                offsetPose(current_target.pose, 0.0, offset_distance_, 0.0), 
+                                current_target.pose, 
                                 step_id, 1);
                             setOctomapCollision(false);
                         }
@@ -2326,7 +2325,17 @@ private:
                     //setOctomapCollision(false);
 
                     previous_target = current_target;
-                    std::copy_n(raw.begin(), 6, previous_position_.begin());
+                    compute_offset_position(
+                        target_position_[orig_i][0], target_position_[orig_i][1], target_position_[orig_i][2],
+                        target_position_[orig_i][3], target_position_[orig_i][4], target_position_[orig_i][5],
+                        object_offset_,
+                        previous_position_[0],
+                        previous_position_[1],
+                        previous_position_[2]);
+                    previous_position_[3] = target_position_[orig_i][3];
+                    previous_position_[4] = target_position_[orig_i][4];
+                    previous_position_[5] = target_position_[orig_i][5]; 
+                    //std::copy_n(raw.begin(), 6, previous_position_.begin());
                     cluster_started = true;
                     success_count++;
                     continue;
@@ -2344,18 +2353,19 @@ private:
                         RCLCPP_WARN(get_logger(), "Retrying move to first target in cluster (attempt %zu)", retry + 1);
                         callMoveRobot(
                             offsetPose(current_target.pose, 0.0, offset_distance_, 0.0),
-                            offsetPose(current_target.pose, 0.0, offset_distance_ + retry * 0.1, 0.0), 
-                            step_id, 1);
+                            offsetPose(current_target.pose, 0.0, - retry * 0.1, 0.0), 
+                            step_id, 2);
                         if (move_success_) 
                         {   
-                            temp_pose = offsetPose(current_target.pose, 0.0, offset_distance_ + retry * 0.1, 0.0);
+                            temp_pose = offsetPose(current_target.pose, 0.0, - retry * 0.1, 0.0);
                             break;
                         }
                     }
                     if (move_success_) {
+                        setOctomapCollision(true);
                         callMoveRobot(
                             temp_pose,
-                            offsetPose(current_target.pose, 0.0, offset_distance_, 0.0), 
+                            current_target.pose, 
                             step_id, 1);
                         setOctomapCollision(false);
                     }
@@ -2373,6 +2383,16 @@ private:
                 feedback->progress = 0.10f + 0.15f * ratio; goal_handle->publish_feedback(feedback);
 
                 previous_target = current_target;
+                compute_offset_position(
+                    target_position_[orig_i][0], target_position_[orig_i][1], target_position_[orig_i][2],
+                    target_position_[orig_i][3], target_position_[orig_i][4], target_position_[orig_i][5],
+                    object_offset_,
+                    previous_position_[0],
+                    previous_position_[1],
+                    previous_position_[2]);
+                previous_position_[3] = target_position_[orig_i][3];
+                previous_position_[4] = target_position_[orig_i][4];
+                previous_position_[5] = target_position_[orig_i][5];                
                 std::copy_n(raw.begin(), 6, previous_position_.begin());
                 success_count++;
             }
