@@ -1674,7 +1674,7 @@ private:
             }
 
             const auto col = checkCollisionWithState(*sub_state);
-            if (!col.collision && k >= 30) {
+            if (!col.collision && k >= 10) {
                 RCLCPP_INFO(get_logger(),
                     "clearApproachPath: path clear at step %d", k);
                 break;
@@ -1682,7 +1682,8 @@ private:
             RCLCPP_WARN(get_logger(),
                 "clearApproachPath: collision at step %d (contacts=%zu, depth=%.4f), masking...",
                 k, col.contact_count, col.depth);
-            if (col.collision && col.depth <= 0.02)
+            if (col.collision && col.depth <= 0.02 && col.body2 != "link0" && col.body2 != "link1"
+            && col.body2 != "link2" && col.body2 != "link3" && col.body2 != "link4" && col.body2 != "link5")
             {
                 if (!applyMaskedOctomapFromCache(col.contact_points, 0.02)) {
                     RCLCPP_WARN(get_logger(), "clearApproachPath: masked octomap failed");
