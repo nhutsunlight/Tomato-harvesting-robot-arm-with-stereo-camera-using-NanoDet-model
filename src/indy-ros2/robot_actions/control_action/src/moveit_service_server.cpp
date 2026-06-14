@@ -168,7 +168,7 @@ public:
     void initialize() {
         move_group_interface_ = std::make_unique<MoveGroupInterface>(shared_from_this(), "indy_manipulator");
         saveOriginalACM();
-        //setGripperIgnoreCollision(true);
+        setGripperIgnoreCollision(true);
         near_tcp_range_ = estimateLink5MaxReach("link5");
         tcp_range_ = estimateLink5MaxReach("tcp0");
     }
@@ -907,6 +907,55 @@ private:
             if ((dx*dx + dy*dy + dz*dz) <= radius_sq) continue;
             out_tree.updateNode(octomap::point3d(it.getX(), it.getY(), it.getZ()), true);
         }
+        out_tree.updateInnerOccupancy();
+        octomap_msgs::msg::Octomap out_msg;
+        octomap_msgs::binaryMapToMsg(out_tree, out_msg);
+        out_msg.header = input_octomap.header;
+        return out_msg;
+    }
+
+    // Dịch chuyển các voxel trong radius quanh center_world
+    octomap_msgs::msg::Octomap shiftOctomapAroundPoint(
+        const octomap_msgs::msg::Octomap& input_octomap,
+        const Eigen::Vector3d& center_world,
+        double clear_radius,
+        const Eigen::Vector3d& contact_vector,
+        double offset_distance)
+    {
+        std::unique_ptr<octomap::AbstractOcTree> abstract_tree(
+            octomap_msgs::msgToMap(input_octomap));
+        auto* tree = dynamic_cast<octomap::OcTree*>(abstract_tree.get());
+        if (!tree) return input_octomap;
+
+        const double res      = tree->getResolution();
+        const double radius_sq = clear_radius * clear_radius;
+        const Eigen::Vector3d shift = contact_vector.normalized() * offset_distance;
+
+        octomap::OcTree out_tree(res);
+
+        for (auto it = tree->begin_leafs(); it != tree->end_leafs(); ++it) {
+            if (!tree->isNodeOccupied(*it)) continue;
+
+            const double ox = it.getX();
+            const double oy = it.getY();
+            const double oz = it.getZ();
+
+            const double dx = ox - center_world.x();
+            const double dy = oy - center_world.y();
+            const double dz = oz - center_world.z();
+
+            if ((dx*dx + dy*dy + dz*dz) <= radius_sq) {
+                // Trong radius → dịch, snap về grid
+                const double nx = std::round((ox + shift.x()) / res) * res;
+                const double ny = std::round((oy + shift.y()) / res) * res;
+                const double nz = std::round((oz + shift.z()) / res) * res;
+                out_tree.updateNode(octomap::point3d(nx, ny, nz), true);
+            } else {
+                // Ngoài radius → giữ nguyên
+                out_tree.updateNode(octomap::point3d(ox, oy, oz), true);
+            }
+        }
+
         out_tree.updateInnerOccupancy();
         octomap_msgs::msg::Octomap out_msg;
         octomap_msgs::binaryMapToMsg(out_tree, out_msg);
@@ -1674,7 +1723,7 @@ private:
             }
 
             const auto col = checkCollisionWithState(*sub_state);
-            if (!col.collision && k >= 10) {
+            if (!col.collision && k >= 30) {
                 RCLCPP_INFO(get_logger(),
                     "clearApproachPath: path clear at step %d", k);
                 break;
@@ -1682,10 +1731,9 @@ private:
             RCLCPP_WARN(get_logger(),
                 "clearApproachPath: collision at step %d (contacts=%zu, depth=%.4f), masking...",
                 k, col.contact_count, col.depth);
-            if (col.collision && col.depth <= 0.02 && col.body2 != "link0" && col.body2 != "link1"
-            && col.body2 != "link2" && col.body2 != "link3" && col.body2 != "link4" && col.body2 != "link5")
+            if (col.collision)
             {
-                if (!applyMaskedOctomapFromCache(col.contact_points, 0.02)) {
+                if (!applyMaskedOctomapFromCache(col.contact_points, col.depth)) {
                     RCLCPP_WARN(get_logger(), "clearApproachPath: masked octomap failed");
                     return false;
                 }
