@@ -1,0 +1,1 @@
+Invoking command in '/home/nhut/indy-ros2/src/indy-ros2/build/skip_signal_msgs': /usr/bin/cmake /home/nhut/indy-ros2/src/indy-ros2/msg/skip_signal_msgs -DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/skip_signal_msgs

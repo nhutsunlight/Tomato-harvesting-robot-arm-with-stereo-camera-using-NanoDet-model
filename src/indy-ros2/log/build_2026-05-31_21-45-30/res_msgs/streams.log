@@ -1,0 +1,33 @@
+[0.035s] Invoking command in '/home/nhut/indy-ros2/src/indy-ros2/build/res_msgs': /usr/bin/cmake /home/nhut/indy-ros2/src/indy-ros2/msg/res_msgs -DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/res_msgs
+[0.485s] -- The C compiler identification is GNU 11.4.0
+[0.949s] -- The CXX compiler identification is GNU 11.4.0
+[1.223s] -- Detecting C compiler ABI info
+[1.448s] -- Detecting C compiler ABI info - done
+[1.467s] -- Check for working C compiler: /usr/bin/cc - skipped
+[1.469s] -- Detecting C compile features
+[1.473s] -- Detecting C compile features - done
+[1.489s] -- Detecting CXX compiler ABI info
+[1.777s] -- Detecting CXX compiler ABI info - done
+[1.804s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[1.805s] -- Detecting CXX compile features
+[1.806s] -- Detecting CXX compile features - done
+[2.550s] CMake Error at CMakeLists.txt:19 (find_package):
+[2.551s]   By not providing "Findament_cmake.cmake" in CMAKE_MODULE_PATH this project
+[2.551s]   has asked CMake to find a package configuration file provided by
+[2.551s]   "ament_cmake", but CMake did not find one.
+[2.552s] 
+[2.552s]   Could not find a package configuration file provided by "ament_cmake" with
+[2.553s]   any of the following names:
+[2.553s] 
+[2.553s]     ament_cmakeConfig.cmake
+[2.554s]     ament_cmake-config.cmake
+[2.554s] 
+[2.554s]   Add the installation prefix of "ament_cmake" to CMAKE_PREFIX_PATH or set
+[2.554s]   "ament_cmake_DIR" to a directory containing one of the above files.  If
+[2.555s]   "ament_cmake" provides a separate development package or SDK, be sure it
+[2.555s]   has been installed.
+[2.555s] 
+[2.555s] 
+[2.556s] -- Configuring incomplete, errors occurred!
+[2.556s] See also "/home/nhut/indy-ros2/src/indy-ros2/build/res_msgs/CMakeFiles/CMakeOutput.log".
+[2.560s] Invoked command in '/home/nhut/indy-ros2/src/indy-ros2/build/res_msgs' returned '1': /usr/bin/cmake /home/nhut/indy-ros2/src/indy-ros2/msg/res_msgs -DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/res_msgs

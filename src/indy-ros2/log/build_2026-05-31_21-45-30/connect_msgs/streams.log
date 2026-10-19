@@ -1,0 +1,33 @@
+[0.040s] Invoking command in '/home/nhut/indy-ros2/src/indy-ros2/build/connect_msgs': /usr/bin/cmake /home/nhut/indy-ros2/src/indy-ros2/msg/connect_msgs -DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/connect_msgs
+[0.512s] -- The C compiler identification is GNU 11.4.0
+[0.965s] -- The CXX compiler identification is GNU 11.4.0
+[1.335s] -- Detecting C compiler ABI info
+[1.550s] -- Detecting C compiler ABI info - done
+[1.563s] -- Check for working C compiler: /usr/bin/cc - skipped
+[1.564s] -- Detecting C compile features
+[1.566s] -- Detecting C compile features - done
+[1.572s] -- Detecting CXX compiler ABI info
+[1.838s] -- Detecting CXX compiler ABI info - done
+[1.857s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[1.858s] -- Detecting CXX compile features
+[1.858s] -- Detecting CXX compile features - done
+[2.540s] CMake Error at CMakeLists.txt:19 (find_package):
+[2.542s]   By not providing "Findament_cmake.cmake" in CMAKE_MODULE_PATH this project
+[2.542s]   has asked CMake to find a package configuration file provided by
+[2.542s]   "ament_cmake", but CMake did not find one.
+[2.543s] 
+[2.543s]   Could not find a package configuration file provided by "ament_cmake" with
+[2.544s]   any of the following names:
+[2.544s] 
+[2.547s]     ament_cmakeConfig.cmake
+[2.548s]     ament_cmake-config.cmake
+[2.548s] 
+[2.548s]   Add the installation prefix of "ament_cmake" to CMAKE_PREFIX_PATH or set
+[2.550s]   "ament_cmake_DIR" to a directory containing one of the above files.  If
+[2.550s]   "ament_cmake" provides a separate development package or SDK, be sure it
+[2.550s]   has been installed.
+[2.550s] 
+[2.550s] 
+[2.569s] -- Configuring incomplete, errors occurred!
+[2.571s] See also "/home/nhut/indy-ros2/src/indy-ros2/build/connect_msgs/CMakeFiles/CMakeOutput.log".
+[2.583s] Invoked command in '/home/nhut/indy-ros2/src/indy-ros2/build/connect_msgs' returned '1': /usr/bin/cmake /home/nhut/indy-ros2/src/indy-ros2/msg/connect_msgs -DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/connect_msgs

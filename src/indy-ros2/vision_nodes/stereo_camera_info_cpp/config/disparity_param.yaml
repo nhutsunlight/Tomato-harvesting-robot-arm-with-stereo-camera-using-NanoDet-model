@@ -1,0 +1,4 @@
+disparity_node:
+  ros__parameters:
+    use_sim_time: True
+    approximate_sync: True

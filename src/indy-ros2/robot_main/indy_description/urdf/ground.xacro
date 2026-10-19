@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="ground_plane"> 
+
+        <link name="ground_plane">
+        <visual>
+            <geometry>
+            <box size="10 10 0.01"/>
+            </geometry>
+            <material name="gray">
+            <color rgba="0.5 0.5 0.5 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+            <box size="10 10 0.01"/>
+            </geometry>
+        </collision>
+        </link>
+
+        <!-- Gắn mặt phẳng với thế giới -->
+        <joint name="ground_fixed" type="fixed">
+        <parent link="world"/>
+        <child link="ground_plane"/>
+        <origin xyz="0 0 -0.01"/>
+        </joint>
+</robot>
+
+

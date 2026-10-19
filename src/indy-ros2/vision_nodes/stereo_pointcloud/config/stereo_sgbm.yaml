@@ -1,0 +1,11 @@
+stereo_sgbm:
+  minDisparity: 0
+  numDisparities: 256
+  blockSize: 5
+  P1: 600 #8*number_of_image_channels*BlockSize*BlockSize         |    # wsize default 3; 5; 7 for SGBM reduced size image; 
+  P2: 2400 #32*number_of_image_channels*BlockSize*BlockSize       |      15 for SGBM full size image (1300px and above); 5 Works nicely
+  disp12MaxDiff: 1
+  uniquenessRatio: 10
+  speckleWindowSize: 100
+  speckleRange: 1
+  preFilterCap: 63

@@ -1,0 +1,38 @@
+[0.000000] (-) TimerEvent: {}
+[0.000543] (-) JobUnselected: {'identifier': 'collect_msgs'}
+[0.000601] (-) JobUnselected: {'identifier': 'config_manager'}
+[0.000617] (-) JobUnselected: {'identifier': 'connect_msgs'}
+[0.000627] (-) JobUnselected: {'identifier': 'cpp_pubsub'}
+[0.001499] (-) JobUnselected: {'identifier': 'depth_map'}
+[0.001547] (-) JobUnselected: {'identifier': 'depth_signal_msgs'}
+[0.001561] (-) JobUnselected: {'identifier': 'dual_publisher_node'}
+[0.001571] (-) JobUnselected: {'identifier': 'gripper_action'}
+[0.001581] (-) JobUnselected: {'identifier': 'harvest_flag_bridge'}
+[0.001618] (-) JobUnselected: {'identifier': 'harvet_info'}
+[0.001631] (-) JobUnselected: {'identifier': 'hmi_launcher'}
+[0.001640] (-) JobUnselected: {'identifier': 'indy_description'}
+[0.001650] (-) JobUnselected: {'identifier': 'indy_driver'}
+[0.001659] (-) JobUnselected: {'identifier': 'indy_gazebo'}
+[0.001668] (-) JobUnselected: {'identifier': 'indy_interfaces'}
+[0.001677] (-) JobUnselected: {'identifier': 'indy_moveit'}
+[0.001714] (-) JobUnselected: {'identifier': 'move_signal_msgs'}
+[0.001727] (-) JobUnselected: {'identifier': 'pointcloud_cpp'}
+[0.001738] (-) JobUnselected: {'identifier': 'position_signal_msgs'}
+[0.001749] (-) JobUnselected: {'identifier': 'res_msgs'}
+[0.001758] (-) JobUnselected: {'identifier': 'robot_home_action'}
+[0.001767] (-) JobUnselected: {'identifier': 'robot_move_action'}
+[0.001776] (-) JobUnselected: {'identifier': 'skip_signal_msgs'}
+[0.001812] (-) JobUnselected: {'identifier': 'start_msgs'}
+[0.001837] (-) JobUnselected: {'identifier': 'start_request_service'}
+[0.001869] (-) JobUnselected: {'identifier': 'stereo_camera_info_cpp'}
+[0.001932] (-) JobUnselected: {'identifier': 'stereo_depth_cpp'}
+[0.001943] (-) JobUnselected: {'identifier': 'stereo_pointcloud'}
+[0.002013] (-) JobUnselected: {'identifier': 'stereo_rectify_cpp'}
+[0.002052] (-) JobUnselected: {'identifier': 'test_msgs'}
+[0.002147] (-) JobUnselected: {'identifier': 'tomato_octomap_msgs'}
+[0.002268] (-) JobUnselected: {'identifier': 'yolobot_recognition_py'}
+[0.002317] (-) JobUnselected: {'identifier': 'yolov8_msgs'}
+[0.002356] (control_action) JobQueued: {'identifier': 'control_action', 'dependencies': OrderedDict([('collect_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/collect_msgs'), ('config_manager', '/home/nhut/indy-ros2/src/indy-ros2/install/config_manager'), ('connect_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/connect_msgs'), ('depth_signal_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/depth_signal_msgs'), ('move_signal_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/move_signal_msgs'), ('position_signal_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/position_signal_msgs'), ('res_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/res_msgs'), ('skip_signal_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/skip_signal_msgs'), ('test_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/test_msgs'), ('tomato_octomap_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/tomato_octomap_msgs'), ('gripper_action', '/home/nhut/indy-ros2/src/indy-ros2/install/gripper_action'), ('robot_home_action', '/home/nhut/indy-ros2/src/indy-ros2/install/robot_home_action'), ('robot_move_action', '/home/nhut/indy-ros2/src/indy-ros2/install/robot_move_action')])}
+[0.002388] (control_action) JobStarted: {'identifier': 'control_action'}
+[0.016468] (control_action) JobEnded: {'identifier': 'control_action', 'rc': 1}
+[0.027633] (-) EventReactorShutdown: {}

@@ -1,0 +1,2 @@
+Invoking command in '/home/nhut/indy-ros2/src/indy-ros2/build/res_msgs': /usr/bin/cmake /home/nhut/indy-ros2/src/indy-ros2/msg/res_msgs -DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/res_msgs
+Invoked command in '/home/nhut/indy-ros2/src/indy-ros2/build/res_msgs' returned '1': /usr/bin/cmake /home/nhut/indy-ros2/src/indy-ros2/msg/res_msgs -DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/res_msgs

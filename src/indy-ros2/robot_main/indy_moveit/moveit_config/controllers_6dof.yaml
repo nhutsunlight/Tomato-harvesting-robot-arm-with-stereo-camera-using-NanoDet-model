@@ -1,0 +1,23 @@
+controller_names:
+    - joint_trajectory_controller
+    - gripper_action_controller # Name of the controller for the gripper
+
+joint_trajectory_controller:
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+        - joint0
+        - joint1
+        - joint2
+        - joint3
+        - joint4
+        - joint5
+
+# Configuration for the gripper_action_controller.
+gripper_action_controller:
+    action_ns: gripper_cmd
+    type: GripperCommand
+    default: true
+    joints:
+      - gripper_controller

@@ -1,0 +1,32 @@
+[0.078s] Invoking command in '/home/nhut/indy-ros2/src/indy-ros2/build/skip_signal_msgs': /usr/bin/cmake /home/nhut/indy-ros2/src/indy-ros2/msg/skip_signal_msgs -DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/skip_signal_msgs
+[0.480s] -- The C compiler identification is GNU 11.4.0
+[0.995s] -- The CXX compiler identification is GNU 11.4.0
+[1.412s] -- Detecting C compiler ABI info
+[1.680s] -- Detecting C compiler ABI info - done
+[1.688s] -- Check for working C compiler: /usr/bin/cc - skipped
+[1.688s] -- Detecting C compile features
+[1.688s] -- Detecting C compile features - done
+[1.692s] -- Detecting CXX compiler ABI info
+[1.942s] -- Detecting CXX compiler ABI info - done
+[1.955s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[1.955s] -- Detecting CXX compile features
+[1.956s] -- Detecting CXX compile features - done
+[3.238s] CMake Error at CMakeLists.txt:16 (find_package):
+[3.238s]   By not providing "Findament_cmake.cmake" in CMAKE_MODULE_PATH this project
+[3.238s]   has asked CMake to find a package configuration file provided by
+[3.238s]   "ament_cmake", but CMake did not find one.
+[3.238s] 
+[3.238s]   Could not find a package configuration file provided by "ament_cmake" with
+[3.238s]   any of the following names:
+[3.238s] 
+[3.239s]     ament_cmakeConfig.cmake
+[3.239s]     ament_cmake-config.cmake
+[3.239s] 
+[3.239s]   Add the installation prefix of "ament_cmake" to CMAKE_PREFIX_PATH or set
+[3.239s]   "ament_cmake_DIR" to a directory containing one of the above files.  If
+[3.239s]   "ament_cmake" provides a separate development package or SDK, be sure it
+[3.239s]   has been installed.
+[3.239s] 
+[3.239s] 
+[3.239s] -- Configuring incomplete, errors occurred!
+[3.239s] See also "/home/nhut/indy-ros2/src/indy-ros2/build/skip_signal_msgs/CMakeFiles/CMakeOutput.log".

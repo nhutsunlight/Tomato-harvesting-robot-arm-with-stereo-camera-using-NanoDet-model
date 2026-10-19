@@ -1,0 +1,33 @@
+[0.035s] Invoking command in '/home/nhut/indy-ros2/src/indy-ros2/build/config_manager': /usr/bin/cmake /home/nhut/indy-ros2/src/indy-ros2/msg/config_manager -DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/config_manager
+[0.500s] -- The C compiler identification is GNU 11.4.0
+[1.018s] -- The CXX compiler identification is GNU 11.4.0
+[1.370s] -- Detecting C compiler ABI info
+[1.647s] -- Detecting C compiler ABI info - done
+[1.666s] -- Check for working C compiler: /usr/bin/cc - skipped
+[1.667s] -- Detecting C compile features
+[1.668s] -- Detecting C compile features - done
+[1.674s] -- Detecting CXX compiler ABI info
+[1.908s] -- Detecting CXX compiler ABI info - done
+[1.927s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[1.928s] -- Detecting CXX compile features
+[1.928s] -- Detecting CXX compile features - done
+[2.585s] CMake Error at CMakeLists.txt:9 (find_package):
+[2.585s]   By not providing "Findament_cmake.cmake" in CMAKE_MODULE_PATH this project
+[2.585s]   has asked CMake to find a package configuration file provided by
+[2.586s]   "ament_cmake", but CMake did not find one.
+[2.586s] 
+[2.586s]   Could not find a package configuration file provided by "ament_cmake" with
+[2.586s]   any of the following names:
+[2.587s] 
+[2.587s]     ament_cmakeConfig.cmake
+[2.587s]     ament_cmake-config.cmake
+[2.587s] 
+[2.587s]   Add the installation prefix of "ament_cmake" to CMAKE_PREFIX_PATH or set
+[2.587s]   "ament_cmake_DIR" to a directory containing one of the above files.  If
+[2.589s]   "ament_cmake" provides a separate development package or SDK, be sure it
+[2.589s]   has been installed.
+[2.589s] 
+[2.590s] 
+[2.590s] -- Configuring incomplete, errors occurred!
+[2.590s] See also "/home/nhut/indy-ros2/src/indy-ros2/build/config_manager/CMakeFiles/CMakeOutput.log".
+[2.619s] Invoked command in '/home/nhut/indy-ros2/src/indy-ros2/build/config_manager' returned '1': /usr/bin/cmake /home/nhut/indy-ros2/src/indy-ros2/msg/config_manager -DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/config_manager

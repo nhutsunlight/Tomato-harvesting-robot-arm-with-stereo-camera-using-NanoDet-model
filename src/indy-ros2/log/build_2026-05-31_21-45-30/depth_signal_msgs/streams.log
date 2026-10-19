@@ -1,0 +1,33 @@
+[0.032s] Invoking command in '/home/nhut/indy-ros2/src/indy-ros2/build/depth_signal_msgs': /usr/bin/cmake /home/nhut/indy-ros2/src/indy-ros2/msg/depth_signal_msgs -DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/depth_signal_msgs
+[0.498s] -- The C compiler identification is GNU 11.4.0
+[1.011s] -- The CXX compiler identification is GNU 11.4.0
+[1.316s] -- Detecting C compiler ABI info
+[1.532s] -- Detecting C compiler ABI info - done
+[1.552s] -- Check for working C compiler: /usr/bin/cc - skipped
+[1.552s] -- Detecting C compile features
+[1.553s] -- Detecting C compile features - done
+[1.560s] -- Detecting CXX compiler ABI info
+[1.836s] -- Detecting CXX compiler ABI info - done
+[1.852s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[1.853s] -- Detecting CXX compile features
+[1.855s] -- Detecting CXX compile features - done
+[2.545s] CMake Error at CMakeLists.txt:16 (find_package):
+[2.546s]   By not providing "Findament_cmake.cmake" in CMAKE_MODULE_PATH this project
+[2.546s]   has asked CMake to find a package configuration file provided by
+[2.546s]   "ament_cmake", but CMake did not find one.
+[2.546s] 
+[2.547s]   Could not find a package configuration file provided by "ament_cmake" with
+[2.547s]   any of the following names:
+[2.547s] 
+[2.548s]     ament_cmakeConfig.cmake
+[2.548s]     ament_cmake-config.cmake
+[2.549s] 
+[2.549s]   Add the installation prefix of "ament_cmake" to CMAKE_PREFIX_PATH or set
+[2.549s]   "ament_cmake_DIR" to a directory containing one of the above files.  If
+[2.550s]   "ament_cmake" provides a separate development package or SDK, be sure it
+[2.550s]   has been installed.
+[2.550s] 
+[2.550s] 
+[2.556s] -- Configuring incomplete, errors occurred!
+[2.558s] See also "/home/nhut/indy-ros2/src/indy-ros2/build/depth_signal_msgs/CMakeFiles/CMakeOutput.log".
+[2.566s] Invoked command in '/home/nhut/indy-ros2/src/indy-ros2/build/depth_signal_msgs' returned '1': /usr/bin/cmake /home/nhut/indy-ros2/src/indy-ros2/msg/depth_signal_msgs -DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/depth_signal_msgs

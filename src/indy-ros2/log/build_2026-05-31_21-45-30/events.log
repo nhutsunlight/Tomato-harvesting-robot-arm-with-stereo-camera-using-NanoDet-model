@@ -1,0 +1,361 @@
+[0.000000] (-) TimerEvent: {}
+[0.001598] (-) JobUnselected: {'identifier': 'cpp_pubsub'}
+[0.001716] (-) JobUnselected: {'identifier': 'depth_map'}
+[0.001836] (-) JobUnselected: {'identifier': 'dual_publisher_node'}
+[0.002380] (-) JobUnselected: {'identifier': 'harvest_flag_bridge'}
+[0.002450] (-) JobUnselected: {'identifier': 'harvet_info'}
+[0.002468] (-) JobUnselected: {'identifier': 'hmi_launcher'}
+[0.002479] (-) JobUnselected: {'identifier': 'indy_description'}
+[0.002490] (-) JobUnselected: {'identifier': 'indy_driver'}
+[0.002502] (-) JobUnselected: {'identifier': 'indy_gazebo'}
+[0.002512] (-) JobUnselected: {'identifier': 'indy_interfaces'}
+[0.002522] (-) JobUnselected: {'identifier': 'indy_moveit'}
+[0.002534] (-) JobUnselected: {'identifier': 'pointcloud_cpp'}
+[0.002552] (-) JobUnselected: {'identifier': 'start_msgs'}
+[0.003382] (-) JobUnselected: {'identifier': 'start_request_service'}
+[0.003876] (-) JobUnselected: {'identifier': 'stereo_camera_info_cpp'}
+[0.003944] (-) JobUnselected: {'identifier': 'stereo_depth_cpp'}
+[0.003957] (-) JobUnselected: {'identifier': 'stereo_pointcloud'}
+[0.003967] (-) JobUnselected: {'identifier': 'stereo_rectify_cpp'}
+[0.003977] (-) JobUnselected: {'identifier': 'yolobot_recognition_py'}
+[0.003991] (-) JobUnselected: {'identifier': 'yolov8_msgs'}
+[0.004031] (collect_msgs) JobQueued: {'identifier': 'collect_msgs', 'dependencies': OrderedDict()}
+[0.004049] (config_manager) JobQueued: {'identifier': 'config_manager', 'dependencies': OrderedDict()}
+[0.004060] (connect_msgs) JobQueued: {'identifier': 'connect_msgs', 'dependencies': OrderedDict()}
+[0.004070] (depth_signal_msgs) JobQueued: {'identifier': 'depth_signal_msgs', 'dependencies': OrderedDict()}
+[0.004079] (move_signal_msgs) JobQueued: {'identifier': 'move_signal_msgs', 'dependencies': OrderedDict()}
+[0.004116] (position_signal_msgs) JobQueued: {'identifier': 'position_signal_msgs', 'dependencies': OrderedDict()}
+[0.004130] (res_msgs) JobQueued: {'identifier': 'res_msgs', 'dependencies': OrderedDict()}
+[0.004141] (skip_signal_msgs) JobQueued: {'identifier': 'skip_signal_msgs', 'dependencies': OrderedDict()}
+[0.004151] (test_msgs) JobQueued: {'identifier': 'test_msgs', 'dependencies': OrderedDict()}
+[0.004161] (tomato_octomap_msgs) JobQueued: {'identifier': 'tomato_octomap_msgs', 'dependencies': OrderedDict()}
+[0.004171] (gripper_action) JobQueued: {'identifier': 'gripper_action', 'dependencies': OrderedDict([('connect_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/connect_msgs')])}
+[0.004185] (robot_home_action) JobQueued: {'identifier': 'robot_home_action', 'dependencies': OrderedDict([('connect_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/connect_msgs')])}
+[0.004223] (robot_move_action) JobQueued: {'identifier': 'robot_move_action', 'dependencies': OrderedDict([('connect_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/connect_msgs')])}
+[0.004240] (control_action) JobQueued: {'identifier': 'control_action', 'dependencies': OrderedDict([('collect_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/collect_msgs'), ('config_manager', '/home/nhut/indy-ros2/src/indy-ros2/install/config_manager'), ('connect_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/connect_msgs'), ('depth_signal_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/depth_signal_msgs'), ('move_signal_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/move_signal_msgs'), ('position_signal_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/position_signal_msgs'), ('res_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/res_msgs'), ('skip_signal_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/skip_signal_msgs'), ('test_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/test_msgs'), ('tomato_octomap_msgs', '/home/nhut/indy-ros2/src/indy-ros2/install/tomato_octomap_msgs'), ('gripper_action', '/home/nhut/indy-ros2/src/indy-ros2/install/gripper_action'), ('robot_home_action', '/home/nhut/indy-ros2/src/indy-ros2/install/robot_home_action'), ('robot_move_action', '/home/nhut/indy-ros2/src/indy-ros2/install/robot_move_action')])}
+[0.004269] (connect_msgs) JobStarted: {'identifier': 'connect_msgs'}
+[0.012848] (collect_msgs) JobStarted: {'identifier': 'collect_msgs'}
+[0.017283] (config_manager) JobStarted: {'identifier': 'config_manager'}
+[0.022970] (depth_signal_msgs) JobStarted: {'identifier': 'depth_signal_msgs'}
+[0.026264] (move_signal_msgs) JobStarted: {'identifier': 'move_signal_msgs'}
+[0.027908] (position_signal_msgs) JobStarted: {'identifier': 'position_signal_msgs'}
+[0.031247] (res_msgs) JobStarted: {'identifier': 'res_msgs'}
+[0.035708] (skip_signal_msgs) JobStarted: {'identifier': 'skip_signal_msgs'}
+[0.040789] (connect_msgs) JobProgress: {'identifier': 'connect_msgs', 'progress': 'cmake'}
+[0.042875] (connect_msgs) Command: {'cmd': ['/usr/bin/cmake', '/home/nhut/indy-ros2/src/indy-ros2/msg/connect_msgs', '-DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/connect_msgs'], 'cwd': '/home/nhut/indy-ros2/src/indy-ros2/build/connect_msgs', 'env': OrderedDict([('USER', 'nhut'), ('SHLVL', '0'), ('HOME', '/home/nhut'), ('OLDPWD', '/home/nhut/indy-ros2'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('WSL_DISTRO_NAME', 'Ubuntu-22.04'), ('WAYLAND_DISPLAY', 'wayland-0'), ('LOGNAME', 'nhut'), ('NAME', 'Nhutsunlight-pc'), ('WSL_INTEROP', '/run/WSL/4834_interop'), ('PULSE_SERVER', 'unix:/mnt/wslg/PulseServer'), ('_', '/usr/bin/colcon'), ('TERM', 'xterm-256color'), ('PATH', '/home/nhut/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Users/nhutn/.codex/tmp/arg0/codex-arg0Ba2pYz:/mnt/c/Python314/Scripts/:/mnt/c/Python314/:/mnt/c/Program Files/CMake/bin:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Windows/System32:/mnt/c/Program Files/usbipd-win/:/mnt/d/Program/Docker/Docker/resources/bin:/mnt/c/Program Files/PuTTY/:/mnt/d/Program/Git/Git/cmd:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/nodejs/:/mnt/c/Users/nhutn/AppData/Local/Microsoft/WindowsApps:/mnt/d/Program/VisualStudioCode/Microsoft VS Code/bin:/mnt/c/Users/nhutn/AppData/Roaming/npm:/mnt/c/Users/nhutn/.vscode/extensions/openai.chatgpt-26.527.31454-win32-x64/bin/windows-x86_64:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/1000/'), ('DISPLAY', ':0'), ('LANG', 'en_US.UTF-8'), ('SHELL', '/bin/bash'), ('PWD', '/home/nhut/indy-ros2/src/indy-ros2/build/connect_msgs'), ('XDG_DATA_DIRS', '/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('COLCON', '1'), ('WSL2_GUI_APPS_ENABLED', '1'), ('HOSTTYPE', 'x86_64'), ('WSLENV', '')]), 'shell': False}
+[0.044570] (collect_msgs) JobProgress: {'identifier': 'collect_msgs', 'progress': 'cmake'}
+[0.045754] (collect_msgs) Command: {'cmd': ['/usr/bin/cmake', '/home/nhut/indy-ros2/src/indy-ros2/msg/collect_msgs', '-DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/collect_msgs'], 'cwd': '/home/nhut/indy-ros2/src/indy-ros2/build/collect_msgs', 'env': OrderedDict([('USER', 'nhut'), ('SHLVL', '0'), ('HOME', '/home/nhut'), ('OLDPWD', '/home/nhut/indy-ros2'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('WSL_DISTRO_NAME', 'Ubuntu-22.04'), ('WAYLAND_DISPLAY', 'wayland-0'), ('LOGNAME', 'nhut'), ('NAME', 'Nhutsunlight-pc'), ('WSL_INTEROP', '/run/WSL/4834_interop'), ('PULSE_SERVER', 'unix:/mnt/wslg/PulseServer'), ('_', '/usr/bin/colcon'), ('TERM', 'xterm-256color'), ('PATH', '/home/nhut/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Users/nhutn/.codex/tmp/arg0/codex-arg0Ba2pYz:/mnt/c/Python314/Scripts/:/mnt/c/Python314/:/mnt/c/Program Files/CMake/bin:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Windows/System32:/mnt/c/Program Files/usbipd-win/:/mnt/d/Program/Docker/Docker/resources/bin:/mnt/c/Program Files/PuTTY/:/mnt/d/Program/Git/Git/cmd:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/nodejs/:/mnt/c/Users/nhutn/AppData/Local/Microsoft/WindowsApps:/mnt/d/Program/VisualStudioCode/Microsoft VS Code/bin:/mnt/c/Users/nhutn/AppData/Roaming/npm:/mnt/c/Users/nhutn/.vscode/extensions/openai.chatgpt-26.527.31454-win32-x64/bin/windows-x86_64:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/1000/'), ('DISPLAY', ':0'), ('LANG', 'en_US.UTF-8'), ('SHELL', '/bin/bash'), ('PWD', '/home/nhut/indy-ros2/src/indy-ros2/build/collect_msgs'), ('XDG_DATA_DIRS', '/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('COLCON', '1'), ('WSL2_GUI_APPS_ENABLED', '1'), ('HOSTTYPE', 'x86_64'), ('WSLENV', '')]), 'shell': False}
+[0.047750] (config_manager) JobProgress: {'identifier': 'config_manager', 'progress': 'cmake'}
+[0.049163] (config_manager) Command: {'cmd': ['/usr/bin/cmake', '/home/nhut/indy-ros2/src/indy-ros2/msg/config_manager', '-DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/config_manager'], 'cwd': '/home/nhut/indy-ros2/src/indy-ros2/build/config_manager', 'env': OrderedDict([('USER', 'nhut'), ('SHLVL', '0'), ('HOME', '/home/nhut'), ('OLDPWD', '/home/nhut/indy-ros2'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('WSL_DISTRO_NAME', 'Ubuntu-22.04'), ('WAYLAND_DISPLAY', 'wayland-0'), ('LOGNAME', 'nhut'), ('NAME', 'Nhutsunlight-pc'), ('WSL_INTEROP', '/run/WSL/4834_interop'), ('PULSE_SERVER', 'unix:/mnt/wslg/PulseServer'), ('_', '/usr/bin/colcon'), ('TERM', 'xterm-256color'), ('PATH', '/home/nhut/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Users/nhutn/.codex/tmp/arg0/codex-arg0Ba2pYz:/mnt/c/Python314/Scripts/:/mnt/c/Python314/:/mnt/c/Program Files/CMake/bin:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Windows/System32:/mnt/c/Program Files/usbipd-win/:/mnt/d/Program/Docker/Docker/resources/bin:/mnt/c/Program Files/PuTTY/:/mnt/d/Program/Git/Git/cmd:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/nodejs/:/mnt/c/Users/nhutn/AppData/Local/Microsoft/WindowsApps:/mnt/d/Program/VisualStudioCode/Microsoft VS Code/bin:/mnt/c/Users/nhutn/AppData/Roaming/npm:/mnt/c/Users/nhutn/.vscode/extensions/openai.chatgpt-26.527.31454-win32-x64/bin/windows-x86_64:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/1000/'), ('DISPLAY', ':0'), ('LANG', 'en_US.UTF-8'), ('SHELL', '/bin/bash'), ('PWD', '/home/nhut/indy-ros2/src/indy-ros2/build/config_manager'), ('XDG_DATA_DIRS', '/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('COLCON', '1'), ('WSL2_GUI_APPS_ENABLED', '1'), ('HOSTTYPE', 'x86_64'), ('WSLENV', '')]), 'shell': False}
+[0.052369] (depth_signal_msgs) JobProgress: {'identifier': 'depth_signal_msgs', 'progress': 'cmake'}
+[0.053142] (depth_signal_msgs) Command: {'cmd': ['/usr/bin/cmake', '/home/nhut/indy-ros2/src/indy-ros2/msg/depth_signal_msgs', '-DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/depth_signal_msgs'], 'cwd': '/home/nhut/indy-ros2/src/indy-ros2/build/depth_signal_msgs', 'env': OrderedDict([('USER', 'nhut'), ('SHLVL', '0'), ('HOME', '/home/nhut'), ('OLDPWD', '/home/nhut/indy-ros2'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('WSL_DISTRO_NAME', 'Ubuntu-22.04'), ('WAYLAND_DISPLAY', 'wayland-0'), ('LOGNAME', 'nhut'), ('NAME', 'Nhutsunlight-pc'), ('WSL_INTEROP', '/run/WSL/4834_interop'), ('PULSE_SERVER', 'unix:/mnt/wslg/PulseServer'), ('_', '/usr/bin/colcon'), ('TERM', 'xterm-256color'), ('PATH', '/home/nhut/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Users/nhutn/.codex/tmp/arg0/codex-arg0Ba2pYz:/mnt/c/Python314/Scripts/:/mnt/c/Python314/:/mnt/c/Program Files/CMake/bin:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Windows/System32:/mnt/c/Program Files/usbipd-win/:/mnt/d/Program/Docker/Docker/resources/bin:/mnt/c/Program Files/PuTTY/:/mnt/d/Program/Git/Git/cmd:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/nodejs/:/mnt/c/Users/nhutn/AppData/Local/Microsoft/WindowsApps:/mnt/d/Program/VisualStudioCode/Microsoft VS Code/bin:/mnt/c/Users/nhutn/AppData/Roaming/npm:/mnt/c/Users/nhutn/.vscode/extensions/openai.chatgpt-26.527.31454-win32-x64/bin/windows-x86_64:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/1000/'), ('DISPLAY', ':0'), ('LANG', 'en_US.UTF-8'), ('SHELL', '/bin/bash'), ('PWD', '/home/nhut/indy-ros2/src/indy-ros2/build/depth_signal_msgs'), ('XDG_DATA_DIRS', '/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('COLCON', '1'), ('WSL2_GUI_APPS_ENABLED', '1'), ('HOSTTYPE', 'x86_64'), ('WSLENV', '')]), 'shell': False}
+[0.055860] (move_signal_msgs) JobProgress: {'identifier': 'move_signal_msgs', 'progress': 'cmake'}
+[0.056604] (move_signal_msgs) Command: {'cmd': ['/usr/bin/cmake', '/home/nhut/indy-ros2/src/indy-ros2/msg/move_signal_msgs', '-DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/move_signal_msgs'], 'cwd': '/home/nhut/indy-ros2/src/indy-ros2/build/move_signal_msgs', 'env': OrderedDict([('USER', 'nhut'), ('SHLVL', '0'), ('HOME', '/home/nhut'), ('OLDPWD', '/home/nhut/indy-ros2'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('WSL_DISTRO_NAME', 'Ubuntu-22.04'), ('WAYLAND_DISPLAY', 'wayland-0'), ('LOGNAME', 'nhut'), ('NAME', 'Nhutsunlight-pc'), ('WSL_INTEROP', '/run/WSL/4834_interop'), ('PULSE_SERVER', 'unix:/mnt/wslg/PulseServer'), ('_', '/usr/bin/colcon'), ('TERM', 'xterm-256color'), ('PATH', '/home/nhut/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Users/nhutn/.codex/tmp/arg0/codex-arg0Ba2pYz:/mnt/c/Python314/Scripts/:/mnt/c/Python314/:/mnt/c/Program Files/CMake/bin:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Windows/System32:/mnt/c/Program Files/usbipd-win/:/mnt/d/Program/Docker/Docker/resources/bin:/mnt/c/Program Files/PuTTY/:/mnt/d/Program/Git/Git/cmd:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/nodejs/:/mnt/c/Users/nhutn/AppData/Local/Microsoft/WindowsApps:/mnt/d/Program/VisualStudioCode/Microsoft VS Code/bin:/mnt/c/Users/nhutn/AppData/Roaming/npm:/mnt/c/Users/nhutn/.vscode/extensions/openai.chatgpt-26.527.31454-win32-x64/bin/windows-x86_64:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/1000/'), ('DISPLAY', ':0'), ('LANG', 'en_US.UTF-8'), ('SHELL', '/bin/bash'), ('PWD', '/home/nhut/indy-ros2/src/indy-ros2/build/move_signal_msgs'), ('XDG_DATA_DIRS', '/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('COLCON', '1'), ('WSL2_GUI_APPS_ENABLED', '1'), ('HOSTTYPE', 'x86_64'), ('WSLENV', '')]), 'shell': False}
+[0.058876] (position_signal_msgs) JobProgress: {'identifier': 'position_signal_msgs', 'progress': 'cmake'}
+[0.060666] (position_signal_msgs) Command: {'cmd': ['/usr/bin/cmake', '/home/nhut/indy-ros2/src/indy-ros2/msg/position_signal_msgs', '-DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/position_signal_msgs'], 'cwd': '/home/nhut/indy-ros2/src/indy-ros2/build/position_signal_msgs', 'env': OrderedDict([('USER', 'nhut'), ('SHLVL', '0'), ('HOME', '/home/nhut'), ('OLDPWD', '/home/nhut/indy-ros2'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('WSL_DISTRO_NAME', 'Ubuntu-22.04'), ('WAYLAND_DISPLAY', 'wayland-0'), ('LOGNAME', 'nhut'), ('NAME', 'Nhutsunlight-pc'), ('WSL_INTEROP', '/run/WSL/4834_interop'), ('PULSE_SERVER', 'unix:/mnt/wslg/PulseServer'), ('_', '/usr/bin/colcon'), ('TERM', 'xterm-256color'), ('PATH', '/home/nhut/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Users/nhutn/.codex/tmp/arg0/codex-arg0Ba2pYz:/mnt/c/Python314/Scripts/:/mnt/c/Python314/:/mnt/c/Program Files/CMake/bin:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Windows/System32:/mnt/c/Program Files/usbipd-win/:/mnt/d/Program/Docker/Docker/resources/bin:/mnt/c/Program Files/PuTTY/:/mnt/d/Program/Git/Git/cmd:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/nodejs/:/mnt/c/Users/nhutn/AppData/Local/Microsoft/WindowsApps:/mnt/d/Program/VisualStudioCode/Microsoft VS Code/bin:/mnt/c/Users/nhutn/AppData/Roaming/npm:/mnt/c/Users/nhutn/.vscode/extensions/openai.chatgpt-26.527.31454-win32-x64/bin/windows-x86_64:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/1000/'), ('DISPLAY', ':0'), ('LANG', 'en_US.UTF-8'), ('SHELL', '/bin/bash'), ('PWD', '/home/nhut/indy-ros2/src/indy-ros2/build/position_signal_msgs'), ('XDG_DATA_DIRS', '/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('COLCON', '1'), ('WSL2_GUI_APPS_ENABLED', '1'), ('HOSTTYPE', 'x86_64'), ('WSLENV', '')]), 'shell': False}
+[0.062103] (res_msgs) JobProgress: {'identifier': 'res_msgs', 'progress': 'cmake'}
+[0.063016] (res_msgs) Command: {'cmd': ['/usr/bin/cmake', '/home/nhut/indy-ros2/src/indy-ros2/msg/res_msgs', '-DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/res_msgs'], 'cwd': '/home/nhut/indy-ros2/src/indy-ros2/build/res_msgs', 'env': OrderedDict([('USER', 'nhut'), ('SHLVL', '0'), ('HOME', '/home/nhut'), ('OLDPWD', '/home/nhut/indy-ros2'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('WSL_DISTRO_NAME', 'Ubuntu-22.04'), ('WAYLAND_DISPLAY', 'wayland-0'), ('LOGNAME', 'nhut'), ('NAME', 'Nhutsunlight-pc'), ('WSL_INTEROP', '/run/WSL/4834_interop'), ('PULSE_SERVER', 'unix:/mnt/wslg/PulseServer'), ('_', '/usr/bin/colcon'), ('TERM', 'xterm-256color'), ('PATH', '/home/nhut/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Users/nhutn/.codex/tmp/arg0/codex-arg0Ba2pYz:/mnt/c/Python314/Scripts/:/mnt/c/Python314/:/mnt/c/Program Files/CMake/bin:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Windows/System32:/mnt/c/Program Files/usbipd-win/:/mnt/d/Program/Docker/Docker/resources/bin:/mnt/c/Program Files/PuTTY/:/mnt/d/Program/Git/Git/cmd:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/nodejs/:/mnt/c/Users/nhutn/AppData/Local/Microsoft/WindowsApps:/mnt/d/Program/VisualStudioCode/Microsoft VS Code/bin:/mnt/c/Users/nhutn/AppData/Roaming/npm:/mnt/c/Users/nhutn/.vscode/extensions/openai.chatgpt-26.527.31454-win32-x64/bin/windows-x86_64:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/1000/'), ('DISPLAY', ':0'), ('LANG', 'en_US.UTF-8'), ('SHELL', '/bin/bash'), ('PWD', '/home/nhut/indy-ros2/src/indy-ros2/build/res_msgs'), ('XDG_DATA_DIRS', '/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('COLCON', '1'), ('WSL2_GUI_APPS_ENABLED', '1'), ('HOSTTYPE', 'x86_64'), ('WSLENV', '')]), 'shell': False}
+[0.066948] (skip_signal_msgs) JobProgress: {'identifier': 'skip_signal_msgs', 'progress': 'cmake'}
+[0.070639] (skip_signal_msgs) Command: {'cmd': ['/usr/bin/cmake', '/home/nhut/indy-ros2/src/indy-ros2/msg/skip_signal_msgs', '-DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/skip_signal_msgs'], 'cwd': '/home/nhut/indy-ros2/src/indy-ros2/build/skip_signal_msgs', 'env': OrderedDict([('USER', 'nhut'), ('SHLVL', '0'), ('HOME', '/home/nhut'), ('OLDPWD', '/home/nhut/indy-ros2'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('WSL_DISTRO_NAME', 'Ubuntu-22.04'), ('WAYLAND_DISPLAY', 'wayland-0'), ('LOGNAME', 'nhut'), ('NAME', 'Nhutsunlight-pc'), ('WSL_INTEROP', '/run/WSL/4834_interop'), ('PULSE_SERVER', 'unix:/mnt/wslg/PulseServer'), ('_', '/usr/bin/colcon'), ('TERM', 'xterm-256color'), ('PATH', '/home/nhut/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Users/nhutn/.codex/tmp/arg0/codex-arg0Ba2pYz:/mnt/c/Python314/Scripts/:/mnt/c/Python314/:/mnt/c/Program Files/CMake/bin:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Windows/System32:/mnt/c/Program Files/usbipd-win/:/mnt/d/Program/Docker/Docker/resources/bin:/mnt/c/Program Files/PuTTY/:/mnt/d/Program/Git/Git/cmd:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/nodejs/:/mnt/c/Users/nhutn/AppData/Local/Microsoft/WindowsApps:/mnt/d/Program/VisualStudioCode/Microsoft VS Code/bin:/mnt/c/Users/nhutn/AppData/Roaming/npm:/mnt/c/Users/nhutn/.vscode/extensions/openai.chatgpt-26.527.31454-win32-x64/bin/windows-x86_64:/snap/bin'), ('XDG_RUNTIME_DIR', '/run/user/1000/'), ('DISPLAY', ':0'), ('LANG', 'en_US.UTF-8'), ('SHELL', '/bin/bash'), ('PWD', '/home/nhut/indy-ros2/src/indy-ros2/build/skip_signal_msgs'), ('XDG_DATA_DIRS', '/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('COLCON', '1'), ('WSL2_GUI_APPS_ENABLED', '1'), ('HOSTTYPE', 'x86_64'), ('WSLENV', '')]), 'shell': False}
+[0.114953] (-) TimerEvent: {}
+[0.215093] (-) TimerEvent: {}
+[0.315251] (-) TimerEvent: {}
+[0.415497] (-) TimerEvent: {}
+[0.515902] (connect_msgs) StdoutLine: {'line': b'-- The C compiler identification is GNU 11.4.0\n'}
+[0.516340] (-) TimerEvent: {}
+[0.516401] (skip_signal_msgs) StdoutLine: {'line': b'-- The C compiler identification is GNU 11.4.0\n'}
+[0.516579] (res_msgs) StdoutLine: {'line': b'-- The C compiler identification is GNU 11.4.0\n'}
+[0.516757] (position_signal_msgs) StdoutLine: {'line': b'-- The C compiler identification is GNU 11.4.0\n'}
+[0.517338] (config_manager) StdoutLine: {'line': b'-- The C compiler identification is GNU 11.4.0\n'}
+[0.518690] (collect_msgs) StdoutLine: {'line': b'-- The C compiler identification is GNU 11.4.0\n'}
+[0.519559] (move_signal_msgs) StdoutLine: {'line': b'-- The C compiler identification is GNU 11.4.0\n'}
+[0.520914] (depth_signal_msgs) StdoutLine: {'line': b'-- The C compiler identification is GNU 11.4.0\n'}
+[0.616540] (-) TimerEvent: {}
+[0.716767] (-) TimerEvent: {}
+[0.817084] (-) TimerEvent: {}
+[0.917410] (-) TimerEvent: {}
+[0.969204] (connect_msgs) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 11.4.0\n'}
+[0.971790] (position_signal_msgs) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 11.4.0\n'}
+[0.977118] (move_signal_msgs) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 11.4.0\n'}
+[0.979623] (res_msgs) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 11.4.0\n'}
+[1.012209] (collect_msgs) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 11.4.0\n'}
+[1.017609] (-) TimerEvent: {}
+[1.031594] (skip_signal_msgs) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 11.4.0\n'}
+[1.033410] (depth_signal_msgs) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 11.4.0\n'}
+[1.035028] (config_manager) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 11.4.0\n'}
+[1.117743] (-) TimerEvent: {}
+[1.218066] (-) TimerEvent: {}
+[1.254078] (res_msgs) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[1.308456] (collect_msgs) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[1.317179] (position_signal_msgs) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[1.318195] (-) TimerEvent: {}
+[1.338363] (depth_signal_msgs) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[1.339114] (connect_msgs) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[1.357858] (move_signal_msgs) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[1.386901] (config_manager) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[1.418394] (-) TimerEvent: {}
+[1.448644] (skip_signal_msgs) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[1.479212] (res_msgs) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[1.498061] (res_msgs) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[1.499974] (res_msgs) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[1.504073] (res_msgs) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[1.518568] (-) TimerEvent: {}
+[1.519708] (res_msgs) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[1.533165] (position_signal_msgs) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[1.540917] (collect_msgs) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[1.551015] (position_signal_msgs) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[1.553400] (position_signal_msgs) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[1.555100] (connect_msgs) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[1.555280] (position_signal_msgs) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[1.555404] (depth_signal_msgs) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[1.558735] (collect_msgs) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[1.559486] (collect_msgs) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[1.560162] (collect_msgs) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[1.566289] (position_signal_msgs) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[1.566629] (collect_msgs) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[1.567457] (connect_msgs) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[1.568323] (connect_msgs) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[1.570951] (connect_msgs) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[1.574577] (depth_signal_msgs) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[1.575179] (depth_signal_msgs) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[1.576052] (depth_signal_msgs) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[1.576730] (connect_msgs) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[1.583207] (depth_signal_msgs) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[1.619121] (-) TimerEvent: {}
+[1.624310] (move_signal_msgs) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[1.649239] (move_signal_msgs) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[1.649734] (move_signal_msgs) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[1.650034] (move_signal_msgs) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[1.657926] (move_signal_msgs) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[1.664691] (config_manager) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[1.683643] (config_manager) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[1.684371] (config_manager) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[1.685161] (config_manager) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[1.691704] (config_manager) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[1.715918] (skip_signal_msgs) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[1.719236] (-) TimerEvent: {}
+[1.724135] (skip_signal_msgs) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[1.724510] (skip_signal_msgs) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[1.724728] (skip_signal_msgs) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[1.728113] (skip_signal_msgs) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[1.807853] (res_msgs) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[1.819455] (-) TimerEvent: {}
+[1.834652] (res_msgs) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[1.835686] (res_msgs) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[1.836771] (res_msgs) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[1.840673] (connect_msgs) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[1.843864] (collect_msgs) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[1.849418] (position_signal_msgs) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[1.858212] (depth_signal_msgs) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[1.859757] (collect_msgs) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[1.860690] (collect_msgs) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[1.861067] (connect_msgs) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[1.861943] (collect_msgs) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[1.862203] (connect_msgs) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[1.862346] (connect_msgs) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[1.866682] (position_signal_msgs) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[1.867553] (position_signal_msgs) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[1.868544] (position_signal_msgs) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[1.875148] (depth_signal_msgs) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[1.876048] (depth_signal_msgs) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[1.877287] (depth_signal_msgs) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[1.900982] (move_signal_msgs) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[1.911603] (move_signal_msgs) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[1.912307] (move_signal_msgs) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[1.913074] (move_signal_msgs) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[1.919635] (-) TimerEvent: {}
+[1.925907] (config_manager) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[1.944450] (config_manager) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[1.945112] (config_manager) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[1.945781] (config_manager) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[1.978123] (skip_signal_msgs) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[1.990949] (skip_signal_msgs) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[1.991561] (skip_signal_msgs) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[1.992604] (skip_signal_msgs) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[2.019765] (-) TimerEvent: {}
+[2.120037] (-) TimerEvent: {}
+[2.220320] (-) TimerEvent: {}
+[2.320623] (-) TimerEvent: {}
+[2.420991] (-) TimerEvent: {}
+[2.521240] (-) TimerEvent: {}
+[2.544124] (connect_msgs) StderrLine: {'line': b'CMake Error at CMakeLists.txt:19 (find_package):\n'}
+[2.545908] (connect_msgs) StderrLine: {'line': b'  By not providing "Findament_cmake.cmake" in CMAKE_MODULE_PATH this project\n'}
+[2.546444] (connect_msgs) StderrLine: {'line': b'  has asked CMake to find a package configuration file provided by\n'}
+[2.546971] (connect_msgs) StderrLine: {'line': b'  "ament_cmake", but CMake did not find one.\n'}
+[2.547388] (connect_msgs) StderrLine: {'line': b'\n'}
+[2.547791] (connect_msgs) StderrLine: {'line': b'  Could not find a package configuration file provided by "ament_cmake" with\n'}
+[2.548139] (connect_msgs) StderrLine: {'line': b'  any of the following names:\n'}
+[2.548513] (connect_msgs) StderrLine: {'line': b'\n'}
+[2.548785] (connect_msgs) StderrLine: {'line': b'    ament_cmakeConfig.cmake\n'}
+[2.552520] (connect_msgs) StderrLine: {'line': b'    ament_cmake-config.cmake\n'}
+[2.552780] (connect_msgs) StderrLine: {'line': b'\n'}
+[2.553013] (connect_msgs) StderrLine: {'line': b'  Add the installation prefix of "ament_cmake" to CMAKE_PREFIX_PATH or set\n'}
+[2.553785] (connect_msgs) StderrLine: {'line': b'  "ament_cmake_DIR" to a directory containing one of the above files.  If\n'}
+[2.554457] (connect_msgs) StderrLine: {'line': b'  "ament_cmake" provides a separate development package or SDK, be sure it\n'}
+[2.554623] (connect_msgs) StderrLine: {'line': b'  has been installed.\n'}
+[2.554804] (connect_msgs) StderrLine: {'line': b'\n'}
+[2.554997] (connect_msgs) StderrLine: {'line': b'\n'}
+[2.555202] (position_signal_msgs) StderrLine: {'line': b'CMake Error at CMakeLists.txt:16 (find_package):\n'}
+[2.555404] (position_signal_msgs) StderrLine: {'line': b'  By not providing "Findament_cmake.cmake" in CMAKE_MODULE_PATH this project\n'}
+[2.555589] (position_signal_msgs) StderrLine: {'line': b'  has asked CMake to find a package configuration file provided by\n'}
+[2.555803] (position_signal_msgs) StderrLine: {'line': b'  "ament_cmake", but CMake did not find one.\n'}
+[2.556030] (position_signal_msgs) StderrLine: {'line': b'\n'}
+[2.556222] (position_signal_msgs) StderrLine: {'line': b'  Could not find a package configuration file provided by "ament_cmake" with\n'}
+[2.556407] (position_signal_msgs) StderrLine: {'line': b'  any of the following names:\n'}
+[2.556614] (position_signal_msgs) StderrLine: {'line': b'\n'}
+[2.556806] (position_signal_msgs) StderrLine: {'line': b'    ament_cmakeConfig.cmake\n'}
+[2.557065] (position_signal_msgs) StderrLine: {'line': b'    ament_cmake-config.cmake\n'}
+[2.557297] (position_signal_msgs) StderrLine: {'line': b'\n'}
+[2.557484] (position_signal_msgs) StderrLine: {'line': b'  Add the installation prefix of "ament_cmake" to CMAKE_PREFIX_PATH or set\n'}
+[2.557662] (position_signal_msgs) StderrLine: {'line': b'  "ament_cmake_DIR" to a directory containing one of the above files.  If\n'}
+[2.557850] (position_signal_msgs) StderrLine: {'line': b'  "ament_cmake" provides a separate development package or SDK, be sure it\n'}
+[2.558028] (position_signal_msgs) StderrLine: {'line': b'  has been installed.\n'}
+[2.558311] (position_signal_msgs) StderrLine: {'line': b'\n'}
+[2.558595] (position_signal_msgs) StderrLine: {'line': b'\n'}
+[2.560151] (collect_msgs) StderrLine: {'line': b'CMake Error at CMakeLists.txt:19 (find_package):\n'}
+[2.560459] (collect_msgs) StderrLine: {'line': b'  By not providing "Findament_cmake.cmake" in CMAKE_MODULE_PATH this project\n'}
+[2.563422] (collect_msgs) StderrLine: {'line': b'  has asked CMake to find a package configuration file provided by\n'}
+[2.563953] (collect_msgs) StderrLine: {'line': b'  "ament_cmake", but CMake did not find one.\n'}
+[2.564199] (collect_msgs) StderrLine: {'line': b'\n'}
+[2.564450] (collect_msgs) StderrLine: {'line': b'  Could not find a package configuration file provided by "ament_cmake" with\n'}
+[2.564706] (collect_msgs) StderrLine: {'line': b'  any of the following names:\n'}
+[2.564944] (collect_msgs) StderrLine: {'line': b'\n'}
+[2.565154] (collect_msgs) StderrLine: {'line': b'    ament_cmakeConfig.cmake\n'}
+[2.565388] (collect_msgs) StderrLine: {'line': b'    ament_cmake-config.cmake\n'}
+[2.565639] (collect_msgs) StderrLine: {'line': b'\n'}
+[2.565845] (collect_msgs) StderrLine: {'line': b'  Add the installation prefix of "ament_cmake" to CMAKE_PREFIX_PATH or set\n'}
+[2.566067] (collect_msgs) StderrLine: {'line': b'  "ament_cmake_DIR" to a directory containing one of the above files.  If\n'}
+[2.566288] (collect_msgs) StderrLine: {'line': b'  "ament_cmake" provides a separate development package or SDK, be sure it\n'}
+[2.566554] (collect_msgs) StderrLine: {'line': b'  has been installed.\n'}
+[2.566760] (collect_msgs) StderrLine: {'line': b'\n'}
+[2.566990] (collect_msgs) StderrLine: {'line': b'\n'}
+[2.567217] (depth_signal_msgs) StderrLine: {'line': b'CMake Error at CMakeLists.txt:16 (find_package):\n'}
+[2.568520] (depth_signal_msgs) StderrLine: {'line': b'  By not providing "Findament_cmake.cmake" in CMAKE_MODULE_PATH this project\n'}
+[2.568828] (depth_signal_msgs) StderrLine: {'line': b'  has asked CMake to find a package configuration file provided by\n'}
+[2.569052] (depth_signal_msgs) StderrLine: {'line': b'  "ament_cmake", but CMake did not find one.\n'}
+[2.569304] (depth_signal_msgs) StderrLine: {'line': b'\n'}
+[2.569543] (depth_signal_msgs) StderrLine: {'line': b'  Could not find a package configuration file provided by "ament_cmake" with\n'}
+[2.569737] (depth_signal_msgs) StderrLine: {'line': b'  any of the following names:\n'}
+[2.569918] (depth_signal_msgs) StderrLine: {'line': b'\n'}
+[2.570096] (depth_signal_msgs) StderrLine: {'line': b'    ament_cmakeConfig.cmake\n'}
+[2.571278] (depth_signal_msgs) StderrLine: {'line': b'    ament_cmake-config.cmake\n'}
+[2.571578] (depth_signal_msgs) StderrLine: {'line': b'\n'}
+[2.571841] (depth_signal_msgs) StderrLine: {'line': b'  Add the installation prefix of "ament_cmake" to CMAKE_PREFIX_PATH or set\n'}
+[2.572129] (depth_signal_msgs) StderrLine: {'line': b'  "ament_cmake_DIR" to a directory containing one of the above files.  If\n'}
+[2.572607] (depth_signal_msgs) StderrLine: {'line': b'  "ament_cmake" provides a separate development package or SDK, be sure it\n'}
+[2.572848] (depth_signal_msgs) StderrLine: {'line': b'  has been installed.\n'}
+[2.573097] (depth_signal_msgs) StderrLine: {'line': b'\n'}
+[2.573353] (depth_signal_msgs) StderrLine: {'line': b'\n'}
+[2.573603] (connect_msgs) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[2.573848] (connect_msgs) StdoutLine: {'line': b'See also "/home/nhut/indy-ros2/src/indy-ros2/build/connect_msgs/CMakeFiles/CMakeOutput.log".\n'}
+[2.575929] (position_signal_msgs) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[2.576854] (position_signal_msgs) StdoutLine: {'line': b'See also "/home/nhut/indy-ros2/src/indy-ros2/build/position_signal_msgs/CMakeFiles/CMakeOutput.log".\n'}
+[2.577244] (collect_msgs) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[2.577932] (collect_msgs) StdoutLine: {'line': b'See also "/home/nhut/indy-ros2/src/indy-ros2/build/collect_msgs/CMakeFiles/CMakeOutput.log".\n'}
+[2.578321] (depth_signal_msgs) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[2.578648] (depth_signal_msgs) StdoutLine: {'line': b'See also "/home/nhut/indy-ros2/src/indy-ros2/build/depth_signal_msgs/CMakeFiles/CMakeOutput.log".\n'}
+[2.581216] (res_msgs) StderrLine: {'line': b'CMake Error at CMakeLists.txt:19 (find_package):\n'}
+[2.581780] (res_msgs) StderrLine: {'line': b'  By not providing "Findament_cmake.cmake" in CMAKE_MODULE_PATH this project\n'}
+[2.582258] (res_msgs) StderrLine: {'line': b'  has asked CMake to find a package configuration file provided by\n'}
+[2.582552] (res_msgs) StderrLine: {'line': b'  "ament_cmake", but CMake did not find one.\n'}
+[2.582800] (res_msgs) StderrLine: {'line': b'\n'}
+[2.583061] (res_msgs) StderrLine: {'line': b'  Could not find a package configuration file provided by "ament_cmake" with\n'}
+[2.583474] (res_msgs) StderrLine: {'line': b'  any of the following names:\n'}
+[2.584198] (res_msgs) StderrLine: {'line': b'\n'}
+[2.584520] (res_msgs) StderrLine: {'line': b'    ament_cmakeConfig.cmake\n'}
+[2.584816] (res_msgs) StderrLine: {'line': b'    ament_cmake-config.cmake\n'}
+[2.585067] (res_msgs) StderrLine: {'line': b'\n'}
+[2.585310] (res_msgs) StderrLine: {'line': b'  Add the installation prefix of "ament_cmake" to CMAKE_PREFIX_PATH or set\n'}
+[2.585551] (res_msgs) StderrLine: {'line': b'  "ament_cmake_DIR" to a directory containing one of the above files.  If\n'}
+[2.585810] (res_msgs) StderrLine: {'line': b'  "ament_cmake" provides a separate development package or SDK, be sure it\n'}
+[2.586056] (res_msgs) StderrLine: {'line': b'  has been installed.\n'}
+[2.586286] (res_msgs) StderrLine: {'line': b'\n'}
+[2.586504] (res_msgs) StderrLine: {'line': b'\n'}
+[2.586751] (res_msgs) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[2.587001] (res_msgs) StdoutLine: {'line': b'See also "/home/nhut/indy-ros2/src/indy-ros2/build/res_msgs/CMakeFiles/CMakeOutput.log".\n'}
+[2.587257] (collect_msgs) CommandEnded: {'returncode': 1}
+[2.587830] (connect_msgs) CommandEnded: {'returncode': 1}
+[2.588346] (depth_signal_msgs) CommandEnded: {'returncode': 1}
+[2.589716] (position_signal_msgs) CommandEnded: {'returncode': 1}
+[2.590901] (res_msgs) CommandEnded: {'returncode': 1}
+[2.596446] (move_signal_msgs) StderrLine: {'line': b'CMake Error at CMakeLists.txt:16 (find_package):\n'}
+[2.597127] (move_signal_msgs) StderrLine: {'line': b'  By not providing "Findament_cmake.cmake" in CMAKE_MODULE_PATH this project\n'}
+[2.597351] (move_signal_msgs) StderrLine: {'line': b'  has asked CMake to find a package configuration file provided by\n'}
+[2.597548] (move_signal_msgs) StderrLine: {'line': b'  "ament_cmake", but CMake did not find one.\n'}
+[2.597740] (move_signal_msgs) StderrLine: {'line': b'\n'}
+[2.597939] (move_signal_msgs) StderrLine: {'line': b'  Could not find a package configuration file provided by "ament_cmake" with\n'}
+[2.598134] (move_signal_msgs) StderrLine: {'line': b'  any of the following names:\n'}
+[2.599037] (move_signal_msgs) StderrLine: {'line': b'\n'}
+[2.599353] (move_signal_msgs) StderrLine: {'line': b'    ament_cmakeConfig.cmake\n'}
+[2.599650] (move_signal_msgs) StderrLine: {'line': b'    ament_cmake-config.cmake\n'}
+[2.599901] (move_signal_msgs) StderrLine: {'line': b'\n'}
+[2.600181] (move_signal_msgs) StderrLine: {'line': b'  Add the installation prefix of "ament_cmake" to CMAKE_PREFIX_PATH or set\n'}
+[2.600408] (move_signal_msgs) StderrLine: {'line': b'  "ament_cmake_DIR" to a directory containing one of the above files.  If\n'}
+[2.601078] (move_signal_msgs) StderrLine: {'line': b'  "ament_cmake" provides a separate development package or SDK, be sure it\n'}
+[2.601295] (move_signal_msgs) StderrLine: {'line': b'  has been installed.\n'}
+[2.601481] (move_signal_msgs) StderrLine: {'line': b'\n'}
+[2.601667] (move_signal_msgs) StderrLine: {'line': b'\n'}
+[2.601853] (move_signal_msgs) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[2.602043] (move_signal_msgs) StdoutLine: {'line': b'See also "/home/nhut/indy-ros2/src/indy-ros2/build/move_signal_msgs/CMakeFiles/CMakeOutput.log".\n'}
+[2.602289] (config_manager) StderrLine: {'line': b'CMake Error at CMakeLists.txt:9 (find_package):\n'}
+[2.602626] (config_manager) StderrLine: {'line': b'  By not providing "Findament_cmake.cmake" in CMAKE_MODULE_PATH this project\n'}
+[2.602817] (config_manager) StderrLine: {'line': b'  has asked CMake to find a package configuration file provided by\n'}
+[2.603007] (config_manager) StderrLine: {'line': b'  "ament_cmake", but CMake did not find one.\n'}
+[2.603205] (config_manager) StderrLine: {'line': b'\n'}
+[2.603415] (config_manager) StderrLine: {'line': b'  Could not find a package configuration file provided by "ament_cmake" with\n'}
+[2.603705] (config_manager) StderrLine: {'line': b'  any of the following names:\n'}
+[2.603952] (config_manager) StderrLine: {'line': b'\n'}
+[2.604167] (config_manager) StderrLine: {'line': b'    ament_cmakeConfig.cmake\n'}
+[2.604355] (config_manager) StderrLine: {'line': b'    ament_cmake-config.cmake\n'}
+[2.604539] (config_manager) StderrLine: {'line': b'\n'}
+[2.604722] (config_manager) StderrLine: {'line': b'  Add the installation prefix of "ament_cmake" to CMAKE_PREFIX_PATH or set\n'}
+[2.604907] (config_manager) StderrLine: {'line': b'  "ament_cmake_DIR" to a directory containing one of the above files.  If\n'}
+[2.606460] (config_manager) StderrLine: {'line': b'  "ament_cmake" provides a separate development package or SDK, be sure it\n'}
+[2.606676] (config_manager) StderrLine: {'line': b'  has been installed.\n'}
+[2.606864] (config_manager) StderrLine: {'line': b'\n'}
+[2.607064] (config_manager) StderrLine: {'line': b'\n'}
+[2.607247] (config_manager) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[2.607433] (config_manager) StdoutLine: {'line': b'See also "/home/nhut/indy-ros2/src/indy-ros2/build/config_manager/CMakeFiles/CMakeOutput.log".\n'}
+[2.607618] (move_signal_msgs) CommandEnded: {'returncode': 1}
+[2.621493] (-) TimerEvent: {}
+[2.626333] (collect_msgs) JobEnded: {'identifier': 'collect_msgs', 'rc': 1}
+[2.633470] (connect_msgs) JobEnded: {'identifier': 'connect_msgs', 'rc': 1}
+[2.636503] (config_manager) CommandEnded: {'returncode': 1}
+[2.644164] (depth_signal_msgs) JobEnded: {'identifier': 'depth_signal_msgs', 'rc': 1}
+[2.650810] (position_signal_msgs) JobEnded: {'identifier': 'position_signal_msgs', 'rc': 1}
+[2.652390] (move_signal_msgs) JobEnded: {'identifier': 'move_signal_msgs', 'rc': 'SIGINT'}
+[2.652799] (config_manager) JobEnded: {'identifier': 'config_manager', 'rc': 'SIGINT'}
+[2.653165] (res_msgs) JobEnded: {'identifier': 'res_msgs', 'rc': 'SIGINT'}
+[2.721749] (-) TimerEvent: {}
+[2.821983] (-) TimerEvent: {}
+[2.922191] (-) TimerEvent: {}
+[3.022348] (-) TimerEvent: {}
+[3.122580] (-) TimerEvent: {}
+[3.222784] (-) TimerEvent: {}
+[3.274515] (skip_signal_msgs) StderrLine: {'line': b'CMake Error at CMakeLists.txt:16 (find_package):\n'}
+[3.274683] (skip_signal_msgs) StderrLine: {'line': b'  By not providing "Findament_cmake.cmake" in CMAKE_MODULE_PATH this project\n'}
+[3.274744] (skip_signal_msgs) StderrLine: {'line': b'  has asked CMake to find a package configuration file provided by\n'}
+[3.274797] (skip_signal_msgs) StderrLine: {'line': b'  "ament_cmake", but CMake did not find one.\n'}
+[3.274842] (skip_signal_msgs) StderrLine: {'line': b'\n'}
+[3.274884] (skip_signal_msgs) StderrLine: {'line': b'  Could not find a package configuration file provided by "ament_cmake" with\n'}
+[3.274929] (skip_signal_msgs) StderrLine: {'line': b'  any of the following names:\n'}
+[3.274977] (skip_signal_msgs) StderrLine: {'line': b'\n'}
+[3.275019] (skip_signal_msgs) StderrLine: {'line': b'    ament_cmakeConfig.cmake\n'}
+[3.275061] (skip_signal_msgs) StderrLine: {'line': b'    ament_cmake-config.cmake\n'}
+[3.275103] (skip_signal_msgs) StderrLine: {'line': b'\n'}
+[3.275145] (skip_signal_msgs) StderrLine: {'line': b'  Add the installation prefix of "ament_cmake" to CMAKE_PREFIX_PATH or set\n'}
+[3.275210] (skip_signal_msgs) StderrLine: {'line': b'  "ament_cmake_DIR" to a directory containing one of the above files.  If\n'}
+[3.275320] (skip_signal_msgs) StderrLine: {'line': b'  "ament_cmake" provides a separate development package or SDK, be sure it\n'}
+[3.275391] (skip_signal_msgs) StderrLine: {'line': b'  has been installed.\n'}
+[3.275473] (skip_signal_msgs) StderrLine: {'line': b'\n'}
+[3.275557] (skip_signal_msgs) StderrLine: {'line': b'\n'}
+[3.275604] (skip_signal_msgs) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[3.275652] (skip_signal_msgs) StdoutLine: {'line': b'See also "/home/nhut/indy-ros2/src/indy-ros2/build/skip_signal_msgs/CMakeFiles/CMakeOutput.log".\n'}
+[3.277448] (skip_signal_msgs) JobEnded: {'identifier': 'skip_signal_msgs', 'rc': 'SIGINT'}
+[3.288010] (test_msgs) JobSkipped: {'identifier': 'test_msgs'}
+[3.288057] (tomato_octomap_msgs) JobSkipped: {'identifier': 'tomato_octomap_msgs'}
+[3.288071] (gripper_action) JobSkipped: {'identifier': 'gripper_action'}
+[3.288083] (robot_home_action) JobSkipped: {'identifier': 'robot_home_action'}
+[3.288093] (robot_move_action) JobSkipped: {'identifier': 'robot_move_action'}
+[3.288103] (control_action) JobSkipped: {'identifier': 'control_action'}
+[3.288114] (-) EventReactorShutdown: {}

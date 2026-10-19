@@ -1,0 +1,2 @@
+Invoking command in '/home/nhut/indy-ros2/src/indy-ros2/build/config_manager': /usr/bin/cmake /home/nhut/indy-ros2/src/indy-ros2/msg/config_manager -DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/config_manager
+Invoked command in '/home/nhut/indy-ros2/src/indy-ros2/build/config_manager' returned '1': /usr/bin/cmake /home/nhut/indy-ros2/src/indy-ros2/msg/config_manager -DCMAKE_INSTALL_PREFIX=/home/nhut/indy-ros2/src/indy-ros2/install/config_manager
